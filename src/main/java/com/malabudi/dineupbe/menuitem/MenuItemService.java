@@ -1,8 +1,7 @@
-package com.example.dineupbe;
+package com.malabudi.dineupbe.menuitem;
 
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package com.example.dineupbe;
+package com.malabudi.dineupbe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

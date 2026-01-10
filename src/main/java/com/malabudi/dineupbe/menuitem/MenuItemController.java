@@ -1,4 +1,4 @@
-package com.example.dineupbe;
+package com.malabudi.dineupbe.menuitem;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

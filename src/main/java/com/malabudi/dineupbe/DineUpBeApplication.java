@@ -1,4 +1,4 @@
-package com.example.dineupbe;
+package com.malabudi.dineupbe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

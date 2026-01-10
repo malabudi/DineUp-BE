@@ -1,4 +1,4 @@
-package com.example.dineupbe;
+package com.malabudi.dineupbe.menuitem;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
