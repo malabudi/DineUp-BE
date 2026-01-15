@@ -1,5 +1,7 @@
-package com.malabudi.dineupbe.menuitem;
+package com.malabudi.dineupbe.controller;
 
+import com.malabudi.dineupbe.dto.MenuItemDto;
+import com.malabudi.dineupbe.service.MenuItemService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class MenuItemController {
     @PostMapping
     public void addNewMenuItem(
             @RequestBody MenuItemDto menuItemDto
-            ) {
+    ) {
         menuItemService.insertMenuItem(menuItemDto);
     }
 }
