@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.menuitem;
+package com.malabudi.dineupbe.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
