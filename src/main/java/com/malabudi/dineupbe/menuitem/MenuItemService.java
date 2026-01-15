@@ -8,27 +8,24 @@ import java.util.stream.Collectors;
 @Service
 public class MenuItemService {
     private final MenuItemRepository menuItemRepository;
-    private final MenuItemDTOMapper menuItemDTOMapper;
-    private final MenuItemEntityMapper menuItemEntityMapper;
+    private final MenuItemMapper menuItemMapper;
 
     public MenuItemService(
             MenuItemRepository menuItemRepository,
-            MenuItemDTOMapper menuItemDTOMapper,
-            MenuItemEntityMapper menuItemEntityMapper) {
+            MenuItemMapper menuItemMapper) {
         this.menuItemRepository = menuItemRepository;
-        this.menuItemDTOMapper = menuItemDTOMapper;
-        this.menuItemEntityMapper = menuItemEntityMapper;
+        this.menuItemMapper = menuItemMapper;
     }
 
     public List<MenuItemDto> getAllMenuItems() {
         return menuItemRepository.findAll()
                 .stream()
-                .map(menuItemDTOMapper)
+                .map(menuItemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public MenuItemDto getMenuItemById(Integer id) {
-        return menuItemDTOMapper.apply(
+        return menuItemMapper.toDto(
                 menuItemRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalStateException(
@@ -37,7 +34,7 @@ public class MenuItemService {
     }
 
     public void insertMenuItem(MenuItemDto menuItemDto) {
-        MenuItem menuItem = menuItemEntityMapper.apply(menuItemDto);
+        MenuItem menuItem = menuItemMapper.toEntity(menuItemDto);
         menuItemRepository.save(menuItem);
     }
 }
