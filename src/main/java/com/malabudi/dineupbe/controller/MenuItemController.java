@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/menu-items")
+@RequestMapping("/api/v1/menu-items")
 public class MenuItemController {
     private final MenuItemService menuItemService;
 
