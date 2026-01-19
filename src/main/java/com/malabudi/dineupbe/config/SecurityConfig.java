@@ -1,11 +1,10 @@
 package com.malabudi.dineupbe.config;
 
-import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,9 +17,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
@@ -29,15 +28,17 @@ public class SecurityConfig {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
-    private final JWTAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            @Lazy JWTAuthenticationFilter jwtAuthFilter
+    ) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authRequests -> authRequests
-                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/v1/auth/**").permitAll()
                     .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -51,15 +52,17 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        SecretKey key = new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA256");
-        return NimbusJwtDecoder.withSecretKey(key)
+        byte[] bytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        SecretKey originalKey = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA256");
+        return NimbusJwtDecoder.withSecretKey(originalKey)
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        SecretKey key = new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA256");
-        return new NimbusJwtEncoder(new ImmutableSecret<>(key));
+        byte[] bytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        SecretKey originalKey = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA256");
+        return NimbusJwtEncoder.withSecretKey(originalKey).build();
     }
 }

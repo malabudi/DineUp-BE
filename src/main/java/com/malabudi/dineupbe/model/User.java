@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +24,24 @@ public class User implements UserDetails {
 
     @Setter
     @Getter
-    private String name;
+    private String firstName;
+
+    @Setter
+    @Getter
+    private String lastName;
+
     @Setter
     @Getter
     private String email;
+
     @Setter
     private String password;
 
     public User() {}
 
-    public User(String name, String email, Role role, String password) {
-        this.name = name;
+    public User(String firstName, String lastName, String email, Role role, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.password = password;

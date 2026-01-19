@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DineUpBeApplication {
 
     public static void main(String[] args) {
+        System.out.println("JWT_SECRET from env: " + System.getenv("JWT_SECRET"));
         SpringApplication.run(DineUpBeApplication.class, args);
     }
 
