@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.mapper;
+package com.malabudi.dineupbe.util;
 
 import com.malabudi.dineupbe.dto.MenuItemDto;
 import com.malabudi.dineupbe.model.MenuItem;
