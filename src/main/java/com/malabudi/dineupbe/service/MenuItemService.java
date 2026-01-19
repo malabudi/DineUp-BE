@@ -2,7 +2,7 @@ package com.malabudi.dineupbe.service;
 
 import com.malabudi.dineupbe.model.MenuItem;
 import com.malabudi.dineupbe.dto.MenuItemDto;
-import com.malabudi.dineupbe.mapper.MenuItemMapper;
+import com.malabudi.dineupbe.util.MenuItemMapper;
 import com.malabudi.dineupbe.repository.MenuItemRepository;
 import org.springframework.stereotype.Service;
 
