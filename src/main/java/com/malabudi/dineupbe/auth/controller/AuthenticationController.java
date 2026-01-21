@@ -1,5 +1,9 @@
-package com.malabudi.dineupbe.security;
+package com.malabudi.dineupbe.auth.controller;
 
+import com.malabudi.dineupbe.auth.data.AuthenticationRequest;
+import com.malabudi.dineupbe.auth.data.AuthenticationResponse;
+import com.malabudi.dineupbe.auth.data.RegisterRequest;
+import com.malabudi.dineupbe.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

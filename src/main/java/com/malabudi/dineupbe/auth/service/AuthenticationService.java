@@ -1,10 +1,13 @@
-package com.malabudi.dineupbe.security;
+package com.malabudi.dineupbe.auth.service;
 
-import com.malabudi.dineupbe.config.JwtService;
-import com.malabudi.dineupbe.repository.UserRepository;
-import com.malabudi.dineupbe.util.Role;
+import com.malabudi.dineupbe.auth.data.AuthenticationRequest;
+import com.malabudi.dineupbe.auth.data.AuthenticationResponse;
+import com.malabudi.dineupbe.auth.data.RegisterRequest;
+import com.malabudi.dineupbe.common.config.JwtService;
+import com.malabudi.dineupbe.user.repository.UserRepository;
+import com.malabudi.dineupbe.common.util.Role;
 import lombok.RequiredArgsConstructor;
-import com.malabudi.dineupbe.model.User;
+import com.malabudi.dineupbe.user.model.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

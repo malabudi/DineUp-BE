@@ -1,7 +1,7 @@
-package com.malabudi.dineupbe.util;
+package com.malabudi.dineupbe.menu.mapper;
 
-import com.malabudi.dineupbe.dto.MenuItemDto;
-import com.malabudi.dineupbe.model.MenuItem;
+import com.malabudi.dineupbe.menu.dto.MenuItemDto;
+import com.malabudi.dineupbe.menu.model.MenuItem;
 import org.springframework.stereotype.Component;
 
 @Component

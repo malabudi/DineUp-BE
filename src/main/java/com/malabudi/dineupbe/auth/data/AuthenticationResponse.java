@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.security;
+package com.malabudi.dineupbe.auth.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-
     private String token;
 }

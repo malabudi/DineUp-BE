@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.util;
+package com.malabudi.dineupbe.common.util;
 
 public enum Role {
     CUSTOMER,

@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.config;
+package com.malabudi.dineupbe.common.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

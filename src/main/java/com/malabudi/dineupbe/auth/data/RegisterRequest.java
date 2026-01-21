@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.security;
+package com.malabudi.dineupbe.auth.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-
+public class RegisterRequest {
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
 }

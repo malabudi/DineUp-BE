@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.config;
+package com.malabudi.dineupbe.common.config;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.*;
