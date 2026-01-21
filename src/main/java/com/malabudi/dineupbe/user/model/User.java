@@ -1,6 +1,6 @@
-package com.malabudi.dineupbe.model;
+package com.malabudi.dineupbe.user.model;
 
-import com.malabudi.dineupbe.util.Role;
+import com.malabudi.dineupbe.common.util.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

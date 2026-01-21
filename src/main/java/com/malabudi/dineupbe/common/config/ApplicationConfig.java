@@ -1,6 +1,6 @@
-package com.malabudi.dineupbe.config;
+package com.malabudi.dineupbe.common.config;
 
-import com.malabudi.dineupbe.repository.UserRepository;
+import com.malabudi.dineupbe.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

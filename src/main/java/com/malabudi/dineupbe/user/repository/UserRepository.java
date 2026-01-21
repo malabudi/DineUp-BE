@@ -1,6 +1,6 @@
-package com.malabudi.dineupbe.repository;
+package com.malabudi.dineupbe.user.repository;
 
-import com.malabudi.dineupbe.model.User;
+import com.malabudi.dineupbe.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

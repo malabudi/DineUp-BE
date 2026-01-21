@@ -1,7 +1,7 @@
-package com.malabudi.dineupbe.controller;
+package com.malabudi.dineupbe.menu.controller;
 
-import com.malabudi.dineupbe.dto.MenuItemDto;
-import com.malabudi.dineupbe.service.MenuItemService;
+import com.malabudi.dineupbe.menu.dto.MenuItemDto;
+import com.malabudi.dineupbe.menu.service.MenuItemService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

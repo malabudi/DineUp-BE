@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.dto;
+package com.malabudi.dineupbe.menu.dto;
 
 import java.math.BigDecimal;
 

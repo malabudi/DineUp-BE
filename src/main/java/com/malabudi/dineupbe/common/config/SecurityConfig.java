@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe.config;
+package com.malabudi.dineupbe.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
