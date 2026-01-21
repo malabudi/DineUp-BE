@@ -8,5 +8,4 @@ public record MenuItemDto(
         String description,
         BigDecimal price,
         String imageUrl
-) {
-}
+) {}

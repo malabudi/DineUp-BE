@@ -15,21 +15,21 @@ public class MenuItemController {
     }
 
     @GetMapping
-    public List<MenuItemDto> getMenuItems() {
+    public List<MenuItemDto> getMenuItem() {
         return menuItemService.getAllMenuItems();
     }
 
     @GetMapping("{id}")
-    public MenuItemDto getMenuItems(
+    public MenuItemDto getMenuItem(
             @PathVariable Integer id
     ) {
         return menuItemService.getMenuItemById(id);
     }
 
     @PostMapping
-    public void addNewMenuItem(
+    public void addMenuItem(
             @RequestBody MenuItemDto menuItemDto
     ) {
-        menuItemService.insertMenuItem(menuItemDto);
+        menuItemService.addMenuItem(menuItemDto);
     }
 }
