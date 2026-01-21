@@ -28,6 +28,7 @@ public class AuthenticationService {
                 Role.CUSTOMER,
                 passwordEncoder.encode(request.getPassword())
         );
+
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
 
