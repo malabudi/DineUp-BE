@@ -4,10 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### HTTP test files ###
-requests.http
-*.http
-
 ### Environment Variables ###
 .env
 

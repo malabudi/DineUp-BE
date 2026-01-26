@@ -3,6 +3,7 @@ package com.malabudi.dineupbe.common.exception;
 import com.malabudi.dineupbe.common.dto.ErrorResponseDto;
 import com.malabudi.dineupbe.menu.exception.DuplicateMenuItemException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
+import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,22 @@ public class GlobalExceptionHandler {
     }
 
     // Menu item exceptions
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDto> handleMenuItemNotFoundException(
+            MenuItemNotFoundException e,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(InvalidMenuItemException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidMenuItemException(
             InvalidMenuItemException e,
