@@ -2,6 +2,7 @@ package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.exception.DuplicateMenuItemException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
+import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.model.MenuItem;
 import com.malabudi.dineupbe.menu.dto.MenuItemDto;
 import com.malabudi.dineupbe.menu.mapper.MenuItemMapper;
@@ -35,8 +36,9 @@ public class MenuItemService {
         return menuItemMapper.toDto(
                 menuItemRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalStateException(
-                        id + " not found"))
+                        new MenuItemNotFoundException(
+                        "Menu item with id " + id + " not found"
+                        ))
         );
     }
 

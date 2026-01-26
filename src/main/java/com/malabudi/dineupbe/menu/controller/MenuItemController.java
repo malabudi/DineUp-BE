@@ -30,10 +30,10 @@ public class MenuItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addMenuItem(
+    public ResponseEntity<String> addMenuItem(
             @RequestBody MenuItemDto menuItemDto
     ) {
         menuItemService.addMenuItem(menuItemDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>("Menu item created successfully", HttpStatus.CREATED);
     }
 }

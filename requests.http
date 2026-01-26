@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:8080
+
+### POST register account
+POST {{baseUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "testEmail@example.com",
+  "password": "password123"
+}
+
+### POST authenticate account
+POST {{baseUrl}}/api/v1/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "testEmail@example.com",
+  "password": "password123"
+}
+
+> {%
+    if (response.status === 200 && response.body.token) {
+        client.global.set("auth_token", response.body.token);
+    } else {
+        throw new Error("Authentication failed or token missing");
+    }
+%}
+
+### GET request to Dine Up Application
+GET {{baseUrl}}/api/v1/
+Authorization: Bearer {{auth_token}}
+
+### GET request for all menu items
+GET {{baseUrl}}/api/v1/menu-items
+Authorization: Bearer {{auth_token}}
+
+### GET request for menu item by id
+GET {{baseUrl}}/api/v1/menu-items/1
+Authorization: Bearer {{auth_token}}
+
+### POST request to add menu item
+POST {{baseUrl}}/api/v1/menu-items
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "Hamburger",
+  "description": "A beef patty placed inside a pretzel bun, served with lettuce, tomato, onion, pickles, and famous housemade aioli.",
+  "price": 8.99
+}
