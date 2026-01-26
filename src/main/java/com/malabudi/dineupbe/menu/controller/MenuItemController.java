@@ -2,6 +2,8 @@ package com.malabudi.dineupbe.menu.controller;
 
 import com.malabudi.dineupbe.menu.dto.MenuItemDto;
 import com.malabudi.dineupbe.menu.service.MenuItemService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,21 +17,23 @@ public class MenuItemController {
     }
 
     @GetMapping
-    public List<MenuItemDto> getMenuItem() {
-        return menuItemService.getAllMenuItems();
+    public ResponseEntity<List<MenuItemDto>> getMenuItem() {
+        List<MenuItemDto> menuItems = menuItemService.getAllMenuItems();
+        return  new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public MenuItemDto getMenuItem(
+    public ResponseEntity<MenuItemDto> getMenuItem(
             @PathVariable Integer id
     ) {
-        return menuItemService.getMenuItemById(id);
+        return new ResponseEntity<>(menuItemService.getMenuItemById(id),  HttpStatus.OK);
     }
 
     @PostMapping
-    public void addMenuItem(
+    public ResponseEntity<Void> addMenuItem(
             @RequestBody MenuItemDto menuItemDto
     ) {
         menuItemService.addMenuItem(menuItemDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
