@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // General exceptions
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handleGenericException(
             Exception e,
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Menu item exceptions
     @ExceptionHandler(InvalidMenuItemException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidMenuItemException(
             InvalidMenuItemException e,
