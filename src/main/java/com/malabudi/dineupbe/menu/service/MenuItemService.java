@@ -25,6 +25,33 @@ public class MenuItemService {
         this.menuItemMapper = menuItemMapper;
     }
 
+    private void validateMenuItem(MenuItemDto menuItemDto) {
+        // ToDo - Validate the image after S3 is hooked up
+        // Is menu item name null
+        if (
+                menuItemDto.name() == null ||
+                        menuItemDto.name().trim().isEmpty()
+        ) {
+            throw new InvalidMenuItemException("Menu item name cannot be empty");
+        }
+
+        // Is menu item price invalid
+        if (
+                menuItemDto.price() == null ||
+                        menuItemDto.price().compareTo(BigDecimal.ZERO) <= 0
+        ) {
+            throw new InvalidMenuItemException("Menu item price must be greater than zero");
+        }
+
+        // Is menu item description valid
+        if (
+                menuItemDto.description() == null ||
+                        menuItemDto.description().trim().isEmpty()
+        ) {
+            throw new InvalidMenuItemException("Menu item description cannot be empty");
+        }
+    }
+
     public List<MenuItemDto> getAllMenuItems() {
         return menuItemRepository.findAll()
                 .stream()
@@ -34,11 +61,7 @@ public class MenuItemService {
 
     public MenuItemDto getMenuItemById(Integer id) {
         return menuItemMapper.toDto(
-                menuItemRepository.findById(id)
-                .orElseThrow(() ->
-                        new MenuItemNotFoundException(
-                        "Menu item with id " + id + " not found"
-                        ))
+                menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new)
         );
     }
 
@@ -56,30 +79,29 @@ public class MenuItemService {
         }
     }
 
-    private void validateMenuItem(MenuItemDto menuItemDto) {
-        // ToDo - Validate the image after S3 is hooked up
-        // Is menu item name null
-        if (
-                menuItemDto.name() == null ||
-                menuItemDto.name().trim().isEmpty()
-        ) {
-            throw new InvalidMenuItemException("Menu item name cannot be empty");
+    public void updateMenuItem(Integer id, MenuItemDto menuItemDto) {
+        MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new);
+
+        validateMenuItem(menuItemDto);
+
+        // Only check if name changes
+        if  (!menuItem.getName().equals(menuItemDto.name())) {
+            checkMenuItemExists(menuItemDto);
         }
 
-        // Is menu item price invalid
-        if (
-                menuItemDto.price() == null ||
-                menuItemDto.price().compareTo(BigDecimal.ZERO) <= 0
-        ) {
-            throw new InvalidMenuItemException("Menu item price must be greater than zero");
+        menuItem.setName(menuItemDto.name());
+        menuItem.setDescription(menuItemDto.description());
+        menuItem.setPrice(menuItemDto.price());
+        menuItem.setImageUrl(menuItemDto.imageUrl());
+
+        menuItemRepository.save(menuItem);
+    }
+
+    public void deleteMenuItem(Integer id) {
+        if (!menuItemRepository.existsById(id)) {
+            throw new  MenuItemNotFoundException(id);
         }
 
-        // Is menu item description valid
-        if (
-                menuItemDto.description() == null ||
-                menuItemDto.description().trim().isEmpty()
-        ) {
-            throw new InvalidMenuItemException("Menu item description cannot be empty");
-        }
+        menuItemRepository.deleteById(id);
     }
 }

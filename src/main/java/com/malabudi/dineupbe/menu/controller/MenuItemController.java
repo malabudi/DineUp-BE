@@ -36,4 +36,22 @@ public class MenuItemController {
         menuItemService.addMenuItem(menuItemDto);
         return new ResponseEntity<>("Menu item created successfully", HttpStatus.CREATED);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateMenuItem(
+            @PathVariable Integer id,
+            @RequestBody MenuItemDto menuItemDto
+    ) {
+
+        menuItemService.updateMenuItem(id, menuItemDto);
+        return new ResponseEntity<>("Menu item updated successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteMenuItem(
+            @PathVariable Integer id
+    ) {
+        menuItemService.deleteMenuItem(id);
+        return new ResponseEntity<>("Menu item with id " + id + " deleted", HttpStatus.OK);
+    }
 }
