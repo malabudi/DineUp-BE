@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,6 +40,13 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authRequests -> authRequests
                     .requestMatchers("/api/v1/auth/**").permitAll()
+
+                    // Define permissions here for which role can call which endpoint
+                    .requestMatchers(HttpMethod.GET, "/api/v1/menu-items/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/menu-items/**").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/menu-items/**").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/menu-items/**").hasAnyRole("ADMIN")
+
                     .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
