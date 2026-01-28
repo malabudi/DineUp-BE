@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:8080
 
-### POST register account
+### POST register account as CUSTOMER
 POST {{baseUrl}}/api/v1/auth/register
 Content-Type: application/json
 
@@ -9,6 +9,17 @@ Content-Type: application/json
   "lastName": "User",
   "email": "testEmail@example.com",
   "password": "password123"
+}
+
+### POST register account as ADMIN
+POST {{baseUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Admin",
+  "lastName": "User",
+  "email": "admin@example.com",
+  "password": "password1234"
 }
 
 ### POST authenticate account
