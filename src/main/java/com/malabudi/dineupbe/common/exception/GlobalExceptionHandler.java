@@ -1,5 +1,7 @@
 package com.malabudi.dineupbe.common.exception;
 
+import com.malabudi.dineupbe.auth.exception.InvalidCredentialsException;
+import com.malabudi.dineupbe.auth.exception.UserAlreadyExistsException;
 import com.malabudi.dineupbe.common.dto.ErrorResponseDto;
 import com.malabudi.dineupbe.menu.exception.DuplicateMenuItemException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
@@ -34,8 +36,41 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Auth exceptions
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidCredentialsException(
+            Exception e,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(
+            Exception e,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
     // Menu item exceptions
-    @ExceptionHandler
+    @ExceptionHandler(MenuItemNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleMenuItemNotFoundException(
             MenuItemNotFoundException e,
             HttpServletRequest request
