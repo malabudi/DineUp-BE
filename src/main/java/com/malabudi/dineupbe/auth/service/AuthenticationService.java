@@ -3,6 +3,8 @@ package com.malabudi.dineupbe.auth.service;
 import com.malabudi.dineupbe.auth.data.AuthenticationRequest;
 import com.malabudi.dineupbe.auth.data.AuthenticationResponse;
 import com.malabudi.dineupbe.auth.data.RegisterRequest;
+import com.malabudi.dineupbe.auth.exception.InvalidCredentialsException;
+import com.malabudi.dineupbe.auth.exception.UserAlreadyExistsException;
 import com.malabudi.dineupbe.common.config.JwtService;
 import com.malabudi.dineupbe.user.repository.UserRepository;
 import com.malabudi.dineupbe.common.util.Role;
@@ -24,11 +26,19 @@ public class AuthenticationService {
 
     // Register new user
     public AuthenticationResponse register(RegisterRequest request) {
+
+        // Check if user exists
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException(
+                    "User with email " + request.getEmail() + " already exists"
+            );
+        }
+
         User user = new User(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
-                Role.CUSTOMER,
+                request.getRole() != null ? request.getRole() : Role.CUSTOMER,
                 passwordEncoder.encode(request.getPassword())
         );
 
@@ -42,16 +52,19 @@ public class AuthenticationService {
 
     // Authenticate existing user
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
 
-        // ToDo: Make sure to return the correct exception, catch it, and handle it
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
         String jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
