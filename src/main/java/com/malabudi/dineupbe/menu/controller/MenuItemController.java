@@ -4,6 +4,7 @@ import com.malabudi.dineupbe.menu.dto.MenuItemDto;
 import com.malabudi.dineupbe.menu.service.MenuItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class MenuItemController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addMenuItem(
             @RequestBody MenuItemDto menuItemDto
     ) {
@@ -38,6 +40,7 @@ public class MenuItemController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateMenuItem(
             @PathVariable Integer id,
             @RequestBody MenuItemDto menuItemDto
@@ -48,6 +51,7 @@ public class MenuItemController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteMenuItem(
             @PathVariable Integer id
     ) {
