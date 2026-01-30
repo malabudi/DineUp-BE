@@ -1,9 +1,6 @@
 package com.malabudi.dineupbe.menu.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +9,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @Entity
+@Table(name = "menu_items")
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +19,10 @@ public class MenuItem {
     private String description;
     private BigDecimal price;
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "menu_group_id")
+    private MenuGroup menuGroup;
 
     public MenuItem() {}
 
