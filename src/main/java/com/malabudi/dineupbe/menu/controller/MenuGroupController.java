@@ -19,23 +19,26 @@ public class MenuGroupController {
     }
 
     @GetMapping
-    public List<MenuGroupDto> getMenuGroups() {
-        return null;
+    public ResponseEntity<List<MenuGroupDto>> getMenuGroups() {
+        List<MenuGroupDto> menuGroupDto = menuGroupService.getMenuGroups();
+        return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
     }
 
     @GetMapping("{name}")
-    public List<MenuGroupDto> getMenuGroupByName(
+    public ResponseEntity<MenuGroupDto> getMenuGroupByName(
             @PathVariable String name
     ) {
-        return null;
+        MenuGroupDto menuGroupDto = menuGroupService.getMenuGroupByName(name);
+        return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> createMenuGroup(
+    public ResponseEntity<MenuGroupDto> createMenuGroup(
             @RequestBody MenuGroupDto menuGroupDto
     ) {
-        return new ResponseEntity<>("Menu group created successfully", HttpStatus.CREATED);
+        menuGroupService.addMenuGroup(menuGroupDto);
+        return new ResponseEntity<>(menuGroupDto, HttpStatus.CREATED);
     }
 
     @PatchMapping("{name}")
