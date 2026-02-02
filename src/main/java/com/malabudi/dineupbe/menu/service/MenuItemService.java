@@ -25,6 +25,12 @@ public class MenuItemService {
         this.menuItemMapper = menuItemMapper;
     }
 
+    private void checkMenuItemExists(MenuItemDto menuItemDto) {
+        if (menuItemRepository.findByName(menuItemDto.name()).isPresent()) {
+            throw new DuplicateMenuItemException("Menu item with name " + menuItemDto.name() + " already exists");
+        }
+    }
+
     private void validateMenuItem(MenuItemDto menuItemDto) {
         // ToDo - Validate the image after S3 is hooked up
         // Is menu item name null
@@ -65,21 +71,16 @@ public class MenuItemService {
         );
     }
 
-    public void addMenuItem(MenuItemDto menuItemDto) {
+    public MenuItemDto addMenuItem(MenuItemDto menuItemDto) {
         this.validateMenuItem(menuItemDto);
         this.checkMenuItemExists(menuItemDto);
 
-        MenuItem menuItem = menuItemMapper.toEntity(menuItemDto);
-        menuItemRepository.save(menuItem);
+        MenuItem mappedMenuItem = menuItemMapper.toEntity(menuItemDto);
+        MenuItem savedMenuItem = menuItemRepository.save(mappedMenuItem);
+        return  menuItemMapper.toDto(savedMenuItem);
     }
 
-    private void checkMenuItemExists(MenuItemDto menuItemDto) {
-        if (menuItemRepository.findByName(menuItemDto.name()).isPresent()) {
-            throw new DuplicateMenuItemException("Menu item with name " + menuItemDto.name() + " already exists");
-        }
-    }
-
-    public void updateMenuItem(Integer id, MenuItemDto menuItemDto) {
+    public MenuItemDto updateMenuItem(Integer id, MenuItemDto menuItemDto) {
         MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new);
 
         validateMenuItem(menuItemDto);
@@ -94,7 +95,8 @@ public class MenuItemService {
         menuItem.setPrice(menuItemDto.price());
         menuItem.setImageUrl(menuItemDto.imageUrl());
 
-        menuItemRepository.save(menuItem);
+        MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
+        return menuItemMapper.toDto(updatedMenuItem);
     }
 
     public void deleteMenuItem(Integer id) {

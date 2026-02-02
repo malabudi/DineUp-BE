@@ -32,22 +32,22 @@ public class MenuItemController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> addMenuItem(
+    public ResponseEntity<MenuItemDto> addMenuItem(
             @RequestBody MenuItemDto menuItemDto
     ) {
-        menuItemService.addMenuItem(menuItemDto);
-        return new ResponseEntity<>("Menu item created successfully", HttpStatus.CREATED);
+        MenuItemDto res = menuItemService.addMenuItem(menuItemDto);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> updateMenuItem(
+    public ResponseEntity<MenuItemDto> updateMenuItem(
             @PathVariable Integer id,
             @RequestBody MenuItemDto menuItemDto
     ) {
 
-        menuItemService.updateMenuItem(id, menuItemDto);
-        return new ResponseEntity<>("Menu item updated successfully", HttpStatus.OK);
+        MenuItemDto res = menuItemService.updateMenuItem(id, menuItemDto);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

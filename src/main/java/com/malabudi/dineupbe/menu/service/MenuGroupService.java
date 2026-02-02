@@ -1,6 +1,7 @@
 package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.mapper.MenuGroupMapper;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
 import com.malabudi.dineupbe.menu.repository.MenuGroupRepository;
@@ -32,8 +33,24 @@ public class MenuGroupService {
         );
     }
 
-    public void addMenuGroup(MenuGroupDto menuGroupDto) {
-        MenuGroup menuGroup = menuGroupMapper.toEntity(menuGroupDto);
-        menuGroupRepository.save(menuGroup);
+    public MenuGroupDto addMenuGroup(MenuGroupDto menuGroupDto) {
+        MenuGroup mappedMenuGroup = menuGroupMapper.toEntity(menuGroupDto);
+        MenuGroup savedMenuGroup = menuGroupRepository.save(mappedMenuGroup);
+        return  menuGroupMapper.toDto(savedMenuGroup);
+    }
+
+    public MenuGroupDto updateMenuGroupName(Integer id, String name) {
+        MenuGroup menuGroup = menuGroupRepository.findById(id).orElseThrow();
+        menuGroup.setName(name);
+        MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
+        return menuGroupMapper.toDto(updatedMenuGroup);
+    }
+
+    public void deleteMenuGroup(Integer id) {
+        if (!menuGroupRepository.existsById(id)) {
+            throw new RuntimeException();
+        }
+
+        menuGroupRepository.deleteById(id);
     }
 }

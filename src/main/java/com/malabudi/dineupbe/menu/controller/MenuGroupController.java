@@ -37,23 +37,26 @@ public class MenuGroupController {
     public ResponseEntity<MenuGroupDto> createMenuGroup(
             @RequestBody MenuGroupDto menuGroupDto
     ) {
-        menuGroupService.addMenuGroup(menuGroupDto);
-        return new ResponseEntity<>(menuGroupDto, HttpStatus.CREATED);
+        MenuGroupDto res = menuGroupService.addMenuGroup(menuGroupDto);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
-    @PatchMapping("{name}")
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> updateMenuGroupByName(
-            @PathVariable String name
+    public ResponseEntity<MenuGroupDto> updateMenuGroupByName(
+            @PathVariable Integer id,
+            @RequestBody String name
     ) {
-        return new ResponseEntity<>("Menu group name updated successfully", HttpStatus.OK);
+        MenuGroupDto res = menuGroupService.updateMenuGroupName(id, name);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @DeleteMapping("{name}")
+    @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteMenuGroup(
-            @PathVariable String name
+            @PathVariable Integer id
     ) {
-        return new ResponseEntity<>("Menu group delete successfully", HttpStatus.OK);
+        menuGroupService.deleteMenuGroup(id);
+        return new ResponseEntity<>("Menu group with id " + id + " deleted", HttpStatus.OK);
     }
 }
