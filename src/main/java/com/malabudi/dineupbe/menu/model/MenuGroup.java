@@ -25,4 +25,8 @@ public class MenuGroup {
         this.name = name;
         this.menuItems = menuItems;
     }
+
+    public MenuGroup() {
+
+    }
 }
