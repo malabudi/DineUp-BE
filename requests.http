@@ -44,6 +44,34 @@ Content-Type: application/json
 GET {{baseUrl}}/api/v1/
 Authorization: Bearer {{auth_token}}
 
+### POST request for menu group
+POST {{baseUrl}}/api/v1/menu-group
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "Main Course"
+}
+
+### GET request for all menu groups
+GET {{baseUrl}}/api/v1/menu-group
+Authorization: Bearer {{auth_token}}
+
+### GET request for all menu group by id
+GET {{baseUrl}}/api/v1/menu-group/1
+Authorization: Bearer {{auth_token}}
+
+### PATCH request for menu group name
+PATCH {{baseUrl}}/api/v1/menu-group/1
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+"Appetizer"
+
+### DELETE menu group
+DELETE {{baseUrl}}/api/v1/menu-group/1
+Authorization: Bearer {{auth_token}}
+
 ### GET request for all menu items
 GET {{baseUrl}}/api/v1/menu-items
 Authorization: Bearer {{auth_token}}
@@ -58,6 +86,7 @@ Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
+  "menuGroupId": 1,
   "name": "Hamburger",
   "description": "A beef patty placed inside a pretzel bun, served with lettuce, tomato, onion, pickles, and famous housemade aioli.",
   "price": 8.99

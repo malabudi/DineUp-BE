@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface MenuGroupRepository extends JpaRepository<MenuGroup, Integer> {
-    Optional<MenuGroup> findByName(String name);
-}
+public interface MenuGroupRepository extends JpaRepository<MenuGroup, Integer> { }
