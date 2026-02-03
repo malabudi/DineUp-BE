@@ -1,5 +1,6 @@
 package com.malabudi.dineupbe.menu.controller;
 
+import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
 import com.malabudi.dineupbe.menu.service.MenuGroupService;
 import org.springframework.http.HttpStatus;
@@ -24,20 +25,20 @@ public class MenuGroupController {
         return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
-    public ResponseEntity<MenuGroupDto> getMenuGroupByName(
-            @PathVariable String name
+    @GetMapping("{id}")
+    public ResponseEntity<MenuGroupDto> getMenuGroupById(
+            @PathVariable Integer id
     ) {
-        MenuGroupDto menuGroupDto = menuGroupService.getMenuGroupByName(name);
+        MenuGroupDto menuGroupDto = menuGroupService.getMenuGroupById(id);
         return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MenuGroupDto> createMenuGroup(
-            @RequestBody MenuGroupDto menuGroupDto
+            @RequestBody CreateMenuGroupDto createMenuGroupDto
     ) {
-        MenuGroupDto res = menuGroupService.addMenuGroup(menuGroupDto);
+        MenuGroupDto res = menuGroupService.addMenuGroup(createMenuGroupDto);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

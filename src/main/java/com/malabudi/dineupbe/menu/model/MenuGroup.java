@@ -25,6 +25,9 @@ public class MenuGroup {
         this.name = name;
         this.menuItems = menuItems;
     }
+    public MenuGroup(String name) {
+        this.name = name;
+    }
 
     public MenuGroup() {
 

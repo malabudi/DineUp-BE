@@ -1,5 +1,6 @@
 package com.malabudi.dineupbe.menu.mapper;
 
+import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
 import org.springframework.stereotype.Component;
@@ -25,13 +26,9 @@ public class MenuGroupMapper {
         );
     }
 
-    public MenuGroup toEntity(MenuGroupDto menuGroupDto) {
+    public MenuGroup toEntity(CreateMenuGroupDto createMenuGroupDto) {
         return new MenuGroup(
-          menuGroupDto.name(),
-          menuGroupDto.items()
-                  .stream()
-                  .map(menuItemMapper::toEntity)
-                  .collect(Collectors.toList())
+                createMenuGroupDto.name()
         );
     }
 }
