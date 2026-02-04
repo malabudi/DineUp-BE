@@ -1,6 +1,5 @@
 package com.malabudi.dineupbe.menu.service;
 
-import com.malabudi.dineupbe.menu.exception.DuplicateMenuItemException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
 import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
@@ -31,12 +30,6 @@ public class MenuItemService {
         this.menuItemMapper = menuItemMapper;
     }
 
-    private void checkMenuItemExists(MenuItemDto menuItemDto) {
-        if (menuItemRepository.findByName(menuItemDto.name()).isPresent()) {
-            throw new DuplicateMenuItemException("Menu item with name " + menuItemDto.name() + " already exists");
-        }
-    }
-
     private MenuGroup checkMenuGroup(Integer menuGroupId) {
         if (menuGroupId == null) {
             throw new InvalidMenuItemException("Menu group id is required");
@@ -52,7 +45,7 @@ public class MenuItemService {
         // Is menu item name null
         if (
                 menuItemDto.name() == null ||
-                        menuItemDto.name().trim().isEmpty()
+                menuItemDto.name().trim().isEmpty()
         ) {
             throw new InvalidMenuItemException("Menu item name cannot be empty");
         }
@@ -60,7 +53,7 @@ public class MenuItemService {
         // Is menu item price invalid
         if (
                 menuItemDto.price() == null ||
-                        menuItemDto.price().compareTo(BigDecimal.ZERO) <= 0
+                menuItemDto.price().compareTo(BigDecimal.ZERO) <= 0
         ) {
             throw new InvalidMenuItemException("Menu item price must be greater than zero");
         }
@@ -68,7 +61,7 @@ public class MenuItemService {
         // Is menu item description valid
         if (
                 menuItemDto.description() == null ||
-                        menuItemDto.description().trim().isEmpty()
+                menuItemDto.description().trim().isEmpty()
         ) {
             throw new InvalidMenuItemException("Menu item description cannot be empty");
         }
@@ -89,7 +82,6 @@ public class MenuItemService {
 
     public MenuItemDto addMenuItem(MenuItemDto menuItemDto) {
         this.validateMenuItem(menuItemDto);
-        this.checkMenuItemExists(menuItemDto);
 
         MenuGroup menuGroup = checkMenuGroup(menuItemDto.menuGroupId());
 
@@ -106,11 +98,6 @@ public class MenuItemService {
                 .orElseThrow(MenuItemNotFoundException::new);
 
         validateMenuItem(menuItemDto);
-
-        // Only check if name changes
-        if  (!menuItem.getName().equals(menuItemDto.name())) {
-            checkMenuItemExists(menuItemDto);
-        }
 
         menuItem.setName(menuItemDto.name());
         menuItem.setDescription(menuItemDto.description());

@@ -2,6 +2,8 @@ package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
+import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
 import com.malabudi.dineupbe.menu.mapper.MenuGroupMapper;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
 import com.malabudi.dineupbe.menu.repository.MenuGroupRepository;
@@ -20,6 +22,15 @@ public class MenuGroupService {
         this.menuGroupMapper = menuGroupMapper;
     }
 
+    private void validateMenuGroup(String menuGroupName) throws InvalidMenuGroupException {
+        if (
+                menuGroupName == null ||
+                menuGroupName.trim().isEmpty()
+        ) {
+            throw new InvalidMenuGroupException("Menu group name is required");
+        }
+    }
+
     public List<MenuGroupDto> getMenuGroups() {
         return menuGroupRepository.findAll()
                 .stream()
@@ -29,18 +40,25 @@ public class MenuGroupService {
 
     public MenuGroupDto getMenuGroupById(Integer id) {
         return  menuGroupMapper.toDto(
-                menuGroupRepository.findById(id).orElseThrow()
+                menuGroupRepository.findById(id)
+                        .orElseThrow(MenuGroupNotFoundException::new)
         );
     }
 
     public MenuGroupDto addMenuGroup(CreateMenuGroupDto createMenuGroupDto) {
+        validateMenuGroup(createMenuGroupDto.name());
+
         MenuGroup mappedMenuGroup = menuGroupMapper.toEntity(createMenuGroupDto);
         MenuGroup savedMenuGroup = menuGroupRepository.save(mappedMenuGroup);
         return  menuGroupMapper.toDto(savedMenuGroup);
     }
 
     public MenuGroupDto updateMenuGroupName(Integer id, String name) {
-        MenuGroup menuGroup = menuGroupRepository.findById(id).orElseThrow();
+        MenuGroup menuGroup = menuGroupRepository.findById(id)
+                .orElseThrow(MenuGroupNotFoundException::new);
+
+        validateMenuGroup(name);
+
         menuGroup.setName(name);
         MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
         return menuGroupMapper.toDto(updatedMenuGroup);
@@ -48,7 +66,7 @@ public class MenuGroupService {
 
     public void deleteMenuGroup(Integer id) {
         if (!menuGroupRepository.existsById(id)) {
-            throw new RuntimeException();
+            throw new MenuGroupNotFoundException(id);
         }
 
         menuGroupRepository.deleteById(id);
