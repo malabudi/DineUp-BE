@@ -1,6 +1,8 @@
 package com.malabudi.dineupbe.auth.exception;
 
-public class InvalidCredentialsException extends RuntimeException {
+import com.malabudi.dineupbe.common.exception.ResourceUnauthorizedException;
+
+public class InvalidCredentialsException extends ResourceUnauthorizedException {
     public InvalidCredentialsException(String message) {
         super(message);
     }

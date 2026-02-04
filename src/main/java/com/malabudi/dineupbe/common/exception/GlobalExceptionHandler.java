@@ -1,12 +1,7 @@
 package com.malabudi.dineupbe.common.exception;
 
 import com.malabudi.dineupbe.auth.exception.InvalidCredentialsException;
-import com.malabudi.dineupbe.auth.exception.UserAlreadyExistsException;
 import com.malabudi.dineupbe.common.dto.ErrorResponseDto;
-import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
-import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
-import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
-import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +14,6 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // General exceptions
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handleGenericException(
             Exception e,
@@ -53,9 +47,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
-    // Auth exceptions
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<ErrorResponseDto> handleInvalidCredentialsException(
+    @ExceptionHandler(ResourceUnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceUnauthorizedException(
             Exception e,
             HttpServletRequest request
     ) {
@@ -70,8 +63,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(
+            Exception e,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceConflictException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceConflictException(
             Exception e,
             HttpServletRequest request
     ) {
@@ -86,26 +95,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    // Menu item exceptions
-    @ExceptionHandler(MenuItemNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleMenuItemNotFoundException(
-            MenuItemNotFoundException e,
-            HttpServletRequest request
-    ) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Not Found",
-                e.getMessage(),
-                request.getRequestURI()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(InvalidMenuItemException.class)
-    public ResponseEntity<ErrorResponseDto> handleInvalidMenuItemException(
-            InvalidMenuItemException e,
+    @ExceptionHandler(ResourceBadRequestException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceBadRequestException(
+            Exception e,
             HttpServletRequest request
     ) {
         ErrorResponseDto error = new ErrorResponseDto(
@@ -117,38 +109,5 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    // Menu Group Exceptions
-    @ExceptionHandler(InvalidMenuGroupException.class)
-    public ResponseEntity<ErrorResponseDto> handleInvalidMenuGroupException(
-            InvalidMenuGroupException e,
-            HttpServletRequest request
-    ) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                e.getMessage(),
-                request.getRequestURI()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(MenuGroupNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleMenuGroupNotFoundException(
-            MenuGroupNotFoundException e,
-            HttpServletRequest request
-    ) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Not Found",
-                e.getMessage(),
-                request.getRequestURI()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

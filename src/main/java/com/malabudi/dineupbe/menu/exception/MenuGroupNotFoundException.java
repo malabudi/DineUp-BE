@@ -1,6 +1,8 @@
 package com.malabudi.dineupbe.menu.exception;
 
-public class MenuGroupNotFoundException extends RuntimeException {
+import com.malabudi.dineupbe.common.exception.ResourceNotFoundException;
+
+public class MenuGroupNotFoundException extends ResourceNotFoundException {
     public MenuGroupNotFoundException() {
       super("Menu group not found");
     }
