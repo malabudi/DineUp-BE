@@ -3,7 +3,7 @@ package com.malabudi.dineupbe.common.exception;
 import com.malabudi.dineupbe.auth.exception.InvalidCredentialsException;
 import com.malabudi.dineupbe.auth.exception.UserAlreadyExistsException;
 import com.malabudi.dineupbe.common.dto.ErrorResponseDto;
-import com.malabudi.dineupbe.menu.exception.DuplicateMenuItemException;
+import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
 import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,19 +118,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DuplicateMenuItemException.class)
-    public ResponseEntity<ErrorResponseDto> handleDuplicateMenuItemException(
-            DuplicateMenuItemException e,
+    // Menu Group Exceptions
+    @ExceptionHandler(InvalidMenuGroupException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidMenuGroupException(
+            InvalidMenuGroupException e,
             HttpServletRequest request
     ) {
         ErrorResponseDto error = new ErrorResponseDto(
                 LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                "Conflict",
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
                 e.getMessage(),
                 request.getRequestURI()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    // TODO: add menu group not found exception, then test exceptions for menu group. After that its orders time
 }
