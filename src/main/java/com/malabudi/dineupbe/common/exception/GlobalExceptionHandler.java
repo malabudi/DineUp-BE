@@ -5,6 +5,7 @@ import com.malabudi.dineupbe.auth.exception.UserAlreadyExistsException;
 import com.malabudi.dineupbe.common.dto.ErrorResponseDto;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
+import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
 import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
@@ -135,5 +136,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // TODO: add menu group not found exception, then test exceptions for menu group. After that its orders time
+    @ExceptionHandler(MenuGroupNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleMenuGroupNotFoundException(
+            MenuGroupNotFoundException e,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
