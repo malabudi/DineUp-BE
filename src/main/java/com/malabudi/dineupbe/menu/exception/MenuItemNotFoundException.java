@@ -1,6 +1,8 @@
 package com.malabudi.dineupbe.menu.exception;
 
-public class MenuItemNotFoundException extends RuntimeException {
+import com.malabudi.dineupbe.common.exception.ResourceNotFoundException;
+
+public class MenuItemNotFoundException extends ResourceNotFoundException {
     public MenuItemNotFoundException(String message) {
         super(message);
     }
