@@ -20,7 +20,7 @@ public class MenuItemController {
     @GetMapping
     public ResponseEntity<List<MenuItemDto>> getMenuItem() {
         List<MenuItemDto> menuItems = menuItemService.getAllMenuItems();
-        return  new ResponseEntity<>(menuItems, HttpStatus.OK);
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 
     @GetMapping("{id}")

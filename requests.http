@@ -106,3 +106,19 @@ Content-Type: application/json
 ### DELETE menu item
 DELETE {{baseUrl}}/api/v1/menu-items/1
 Authorization: Bearer {{auth_token}}
+
+### POST to place order
+POST {{baseUrl}}/api/v1/order
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+[
+  {
+    "menuItemId": 1,
+    "quantity": 2
+  },
+  {
+    "menuItemId": 2,
+    "quantity": 4
+  }
+]
