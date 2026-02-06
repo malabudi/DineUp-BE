@@ -3,8 +3,8 @@ package com.malabudi.dineupbe.menu.dto;
 import java.math.BigDecimal;
 
 public record MenuItemDto(
-        Integer id,
-        Integer menuGroupId,
+        Long id,
+        Long menuGroupId,
         String name,
         String description,
         BigDecimal price,

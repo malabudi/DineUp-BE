@@ -11,7 +11,7 @@ public class MenuItemNotFoundException extends ResourceNotFoundException {
         super("Menu item not found");
     }
 
-    public MenuItemNotFoundException(Integer id) {
+    public MenuItemNotFoundException(Long id) {
         super("Menu item with id " + id + " not found");
     }
 }

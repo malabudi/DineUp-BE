@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class MenuItemService {
     private final MenuItemRepository menuItemRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuItemMapper menuItemMapper;
 
     public MenuItemService(
             MenuItemRepository menuItemRepository,
@@ -27,10 +27,9 @@ public class MenuItemService {
     ) {
         this.menuItemRepository = menuItemRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.menuItemMapper = menuItemMapper;
     }
 
-    private MenuGroup checkMenuGroup(Integer menuGroupId) {
+    private MenuGroup checkMenuGroup(Long menuGroupId) {
         if (menuGroupId == null) {
             throw new InvalidMenuItemException("Menu group id is required");
         }
@@ -74,7 +73,7 @@ public class MenuItemService {
                 .collect(Collectors.toList());
     }
 
-    public MenuItemDto getMenuItemById(Integer id) {
+    public MenuItemDto getMenuItemById(Long id) {
         return MenuItemMapper.toDto(
                 menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new)
         );
@@ -95,10 +94,10 @@ public class MenuItemService {
         menuItem.setMenuGroup(menuGroup);
         menuItemRepository.save(menuItem);
 
-        return  menuItemMapper.toDto(menuItem);
+        return  MenuItemMapper.toDto(menuItem);
     }
 
-    public MenuItemDto updateMenuItem(Integer id, MenuItemDto menuItemDto) {
+    public MenuItemDto updateMenuItem(Long id, MenuItemDto menuItemDto) {
         MenuItem menuItem = menuItemRepository.findById(id)
                 .orElseThrow(MenuItemNotFoundException::new);
 
@@ -112,17 +111,17 @@ public class MenuItemService {
         // Update menu group ID if menu item is in a different group
         if (
                 menuItemDto.menuGroupId() != null &&
-                menuItem.getMenuGroup().getId() != menuItemDto.menuGroupId()
+                !Objects.equals(menuItem.getMenuGroup().getId(), menuItemDto.menuGroupId())
         ) {
             MenuGroup menuGroup = checkMenuGroup(menuItemDto.menuGroupId());
             menuItem.setMenuGroup(menuGroup);
         }
 
         MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
-        return menuItemMapper.toDto(updatedMenuItem);
+        return MenuItemMapper.toDto(updatedMenuItem);
     }
 
-    public void deleteMenuItem(Integer id) {
+    public void deleteMenuItem(Long id) {
         if (!menuItemRepository.existsById(id)) {
             throw new  MenuItemNotFoundException(id);
         }
