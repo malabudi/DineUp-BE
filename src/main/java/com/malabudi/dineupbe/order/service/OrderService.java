@@ -6,13 +6,20 @@ import com.malabudi.dineupbe.menu.repository.MenuItemRepository;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
 import com.malabudi.dineupbe.order.dto.LineItemRequestDto;
 import com.malabudi.dineupbe.order.dto.OrderDto;
+import com.malabudi.dineupbe.order.dto.UpdateOrderStatusDto;
 import com.malabudi.dineupbe.order.mapper.OrderMapper;
 import com.malabudi.dineupbe.order.model.LineItem;
 import com.malabudi.dineupbe.order.model.Order;
 import com.malabudi.dineupbe.order.repository.OrderRepository;
+import com.malabudi.dineupbe.user.exception.UserNotFoundException;
 import com.malabudi.dineupbe.user.model.User;
 import com.malabudi.dineupbe.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -44,5 +51,35 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
         return OrderMapper.toOrderDto(savedOrder);
+    }
+
+    public List<OrderDto> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(OrderMapper::toOrderDto)
+                .toList();
+    }
+
+    public List<OrderDto> getCustomerOrders(String email) {
+        User customer = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Order> orders = Collections
+                .singletonList(orderRepository.findByCustomer(customer)
+                .orElseThrow(RuntimeException::new));
+
+        return orders.stream()
+                .map(OrderMapper::toOrderDto)
+                .toList();
+    }
+
+    public OrderDto updateOrderStatus(UpdateOrderStatusDto updateOrderDto) {
+        Order order = orderRepository.findById(updateOrderDto.orderId())
+                .orElseThrow(RuntimeException::new);
+
+        order.setOrderStatus(updateOrderDto.orderStatus());
+        Order updatedOrder = orderRepository.save(order);
+
+        return OrderMapper.toOrderDto(updatedOrder);
     }
 }
