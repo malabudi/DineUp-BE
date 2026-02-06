@@ -2,6 +2,7 @@ package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.dto.UpdateMenuGroupDto;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
 import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
 import com.malabudi.dineupbe.menu.mapper.MenuGroupMapper;
@@ -54,13 +55,13 @@ public class MenuGroupService {
         return  MenuGroupMapper.toDto(menuGroup);
     }
 
-    public MenuGroupDto updateMenuGroupName(Long id, String name) {
+    public MenuGroupDto updateMenuGroupName(Long id, UpdateMenuGroupDto updateMenuGroupDto) {
         MenuGroup menuGroup = menuGroupRepository.findById(id)
                 .orElseThrow(MenuGroupNotFoundException::new);
 
-        validateMenuGroup(name);
+        validateMenuGroup(updateMenuGroupDto.name());
 
-        menuGroup.setName(name);
+        menuGroup.setName(updateMenuGroupDto.name());
         MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
         return MenuGroupMapper.toDto(updatedMenuGroup);
     }

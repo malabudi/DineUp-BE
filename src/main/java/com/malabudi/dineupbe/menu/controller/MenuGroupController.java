@@ -2,6 +2,7 @@ package com.malabudi.dineupbe.menu.controller;
 
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.dto.UpdateMenuGroupDto;
 import com.malabudi.dineupbe.menu.service.MenuGroupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +47,9 @@ public class MenuGroupController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MenuGroupDto> updateMenuGroupByName(
             @PathVariable Long id,
-            @RequestBody String name
+            @RequestBody UpdateMenuGroupDto updateMenuGroupDto
     ) {
-        MenuGroupDto res = menuGroupService.updateMenuGroupName(id, name);
+        MenuGroupDto res = menuGroupService.updateMenuGroupName(id, updateMenuGroupDto);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
