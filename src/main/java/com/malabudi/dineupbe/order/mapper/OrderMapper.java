@@ -4,7 +4,7 @@ import com.malabudi.dineupbe.order.dto.OrderDto;
 import com.malabudi.dineupbe.order.model.Order;
 
 public class OrderMapper {
-    public static OrderDto toOrderDto(Order order) {
+    public static OrderDto toDto(Order order) {
         return new OrderDto(
                 order.getId(),
                 order.getCustomer().getId(),
@@ -12,7 +12,7 @@ public class OrderMapper {
                         " " +
                         order.getCustomer().getLastName(),
                 order.getLineItems().stream()
-                        .map(LineItemMapper::toLineItemDto)
+                        .map(LineItemMapper::toDto)
                         .toList(),
                 order.getOrderDate(),
                 order.getOrderStatus(),
