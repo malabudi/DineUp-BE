@@ -19,15 +19,16 @@ public class MenuItemController {
 
     @GetMapping
     public ResponseEntity<List<MenuItemDto>> getMenuItem() {
-        List<MenuItemDto> menuItems = menuItemService.getAllMenuItems();
-        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+        List<MenuItemDto> res = menuItemService.getAllMenuItems();
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<MenuItemDto> getMenuItem(
             @PathVariable Integer id
     ) {
-        return new ResponseEntity<>(menuItemService.getMenuItemById(id),  HttpStatus.OK);
+        MenuItemDto res = menuItemService.getMenuItemById(id);
+        return new ResponseEntity<>(res,  HttpStatus.OK);
     }
 
     @PostMapping

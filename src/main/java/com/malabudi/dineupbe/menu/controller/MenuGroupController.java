@@ -21,8 +21,8 @@ public class MenuGroupController {
 
     @GetMapping
     public ResponseEntity<List<MenuGroupDto>> getMenuGroups() {
-        List<MenuGroupDto> menuGroupDto = menuGroupService.getMenuGroups();
-        return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
+        List<MenuGroupDto> res = menuGroupService.getMenuGroups();
+        return new  ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("{id}")

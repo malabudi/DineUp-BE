@@ -21,8 +21,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // PATCH - order status
-
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderDto> createOrder(
