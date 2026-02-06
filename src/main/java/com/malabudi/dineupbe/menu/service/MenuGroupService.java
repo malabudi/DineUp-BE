@@ -15,11 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class MenuGroupService {
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuGroupMapper menuGroupMapper;
 
-    MenuGroupService(MenuGroupRepository menuGroupRepository,  MenuGroupMapper menuGroupMapper) {
+    MenuGroupService(MenuGroupRepository menuGroupRepository) {
         this.menuGroupRepository = menuGroupRepository;
-        this.menuGroupMapper = menuGroupMapper;
     }
 
     private void validateMenuGroup(String menuGroupName) throws InvalidMenuGroupException {
@@ -34,12 +32,12 @@ public class MenuGroupService {
     public List<MenuGroupDto> getMenuGroups() {
         return menuGroupRepository.findAll()
                 .stream()
-                .map(menuGroupMapper::toDto)
+                .map(MenuGroupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public MenuGroupDto getMenuGroupById(Integer id) {
-        return  menuGroupMapper.toDto(
+        return  MenuGroupMapper.toDto(
                 menuGroupRepository.findById(id)
                         .orElseThrow(MenuGroupNotFoundException::new)
         );
@@ -48,9 +46,12 @@ public class MenuGroupService {
     public MenuGroupDto addMenuGroup(CreateMenuGroupDto createMenuGroupDto) {
         validateMenuGroup(createMenuGroupDto.name());
 
-        MenuGroup mappedMenuGroup = menuGroupMapper.toEntity(createMenuGroupDto);
-        MenuGroup savedMenuGroup = menuGroupRepository.save(mappedMenuGroup);
-        return  menuGroupMapper.toDto(savedMenuGroup);
+        MenuGroup menuGroup = new MenuGroup(
+                createMenuGroupDto.name()
+        );
+        menuGroupRepository.save(menuGroup);
+
+        return  MenuGroupMapper.toDto(menuGroup);
     }
 
     public MenuGroupDto updateMenuGroupName(Integer id, String name) {
@@ -61,7 +62,7 @@ public class MenuGroupService {
 
         menuGroup.setName(name);
         MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
-        return menuGroupMapper.toDto(updatedMenuGroup);
+        return MenuGroupMapper.toDto(updatedMenuGroup);
     }
 
     public void deleteMenuGroup(Integer id) {

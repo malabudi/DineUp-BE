@@ -70,12 +70,12 @@ public class MenuItemService {
     public List<MenuItemDto> getAllMenuItems() {
         return menuItemRepository.findAll()
                 .stream()
-                .map(menuItemMapper::toDto)
+                .map(MenuItemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public MenuItemDto getMenuItemById(Integer id) {
-        return menuItemMapper.toDto(
+        return MenuItemMapper.toDto(
                 menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new)
         );
     }
@@ -85,12 +85,17 @@ public class MenuItemService {
 
         MenuGroup menuGroup = checkMenuGroup(menuItemDto.menuGroupId());
 
-        MenuItem mappedMenuItem = menuItemMapper.toEntity(menuItemDto);
-        mappedMenuItem.setMenuGroup(menuGroup);
+        MenuItem menuItem = new MenuItem(
+                menuItemDto.name(),
+                menuItemDto.description(),
+                menuItemDto.price(),
+                menuItemDto.imageUrl()
+        );
 
-        MenuItem savedMenuItem = menuItemRepository.save(mappedMenuItem);
+        menuItem.setMenuGroup(menuGroup);
+        menuItemRepository.save(menuItem);
 
-        return  menuItemMapper.toDto(savedMenuItem);
+        return  menuItemMapper.toDto(menuItem);
     }
 
     public MenuItemDto updateMenuItem(Integer id, MenuItemDto menuItemDto) {

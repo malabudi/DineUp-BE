@@ -16,10 +16,8 @@ import com.malabudi.dineupbe.user.model.User;
 import com.malabudi.dineupbe.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -50,13 +48,13 @@ public class OrderService {
         order.calculateTotalPrice();
 
         Order savedOrder = orderRepository.save(order);
-        return OrderMapper.toOrderDto(savedOrder);
+        return OrderMapper.toDto(savedOrder);
     }
 
     public List<OrderDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
-                .map(OrderMapper::toOrderDto)
+                .map(OrderMapper::toDto)
                 .toList();
     }
 
@@ -69,7 +67,7 @@ public class OrderService {
                 .orElseThrow(RuntimeException::new));
 
         return orders.stream()
-                .map(OrderMapper::toOrderDto)
+                .map(OrderMapper::toDto)
                 .toList();
     }
 
@@ -80,6 +78,6 @@ public class OrderService {
         order.setOrderStatus(updateOrderDto.orderStatus());
         Order updatedOrder = orderRepository.save(order);
 
-        return OrderMapper.toOrderDto(updatedOrder);
+        return OrderMapper.toDto(updatedOrder);
     }
 }
