@@ -25,7 +25,7 @@ public class MenuItemController {
 
     @GetMapping("{id}")
     public ResponseEntity<MenuItemDto> getMenuItem(
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         MenuItemDto res = menuItemService.getMenuItemById(id);
         return new ResponseEntity<>(res,  HttpStatus.OK);
@@ -43,7 +43,7 @@ public class MenuItemController {
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MenuItemDto> updateMenuItem(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestBody MenuItemDto menuItemDto
     ) {
 
@@ -54,7 +54,7 @@ public class MenuItemController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteMenuItem(
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         menuItemService.deleteMenuItem(id);
         return new ResponseEntity<>("Menu item with id " + id + " deleted", HttpStatus.OK);

@@ -11,7 +11,7 @@ public class MenuGroupNotFoundException extends ResourceNotFoundException {
         super(message);
     }
 
-  public MenuGroupNotFoundException(Integer id ) {
+  public MenuGroupNotFoundException(Long id ) {
     super("Menu group with id " + id + " not found");
   }
 }

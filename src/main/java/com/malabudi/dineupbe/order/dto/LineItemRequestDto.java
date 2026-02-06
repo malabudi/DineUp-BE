@@ -1,6 +1,6 @@
 package com.malabudi.dineupbe.order.dto;
 
 public record LineItemRequestDto(
-        Integer menuItemId,
+        Long menuItemId,
         Integer quantity
 ) {}

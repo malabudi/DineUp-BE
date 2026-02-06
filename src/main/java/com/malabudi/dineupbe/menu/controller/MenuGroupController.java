@@ -27,7 +27,7 @@ public class MenuGroupController {
 
     @GetMapping("{id}")
     public ResponseEntity<MenuGroupDto> getMenuGroupById(
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         MenuGroupDto menuGroupDto = menuGroupService.getMenuGroupById(id);
         return new  ResponseEntity<>(menuGroupDto, HttpStatus.OK);
@@ -45,7 +45,7 @@ public class MenuGroupController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MenuGroupDto> updateMenuGroupByName(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestBody String name
     ) {
         MenuGroupDto res = menuGroupService.updateMenuGroupName(id, name);
@@ -55,7 +55,7 @@ public class MenuGroupController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteMenuGroup(
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         menuGroupService.deleteMenuGroup(id);
         return new ResponseEntity<>("Menu group with id " + id + " deleted", HttpStatus.OK);
