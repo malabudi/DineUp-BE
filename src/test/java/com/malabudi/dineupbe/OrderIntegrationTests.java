@@ -6,7 +6,7 @@ import com.malabudi.dineupbe.auth.data.RegisterRequest;
 import com.malabudi.dineupbe.common.util.OrderStatus;
 import com.malabudi.dineupbe.common.util.Role;
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
-import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.dto.ResponseMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.MenuItemDto;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
 import com.malabudi.dineupbe.order.dto.LineItemDto;
@@ -115,11 +115,11 @@ public class OrderIntegrationTests {
         );
         HttpEntity<CreateMenuGroupDto> mainCourseEntity = new HttpEntity<>(mainCourseRequest, adminHeaders);
 
-        ResponseEntity<MenuGroupDto> mainCourseResponse =
+        ResponseEntity<ResponseMenuGroupDto> mainCourseResponse =
                 restTemplate.postForEntity(
                         "/api/v1/menu-group",
                         mainCourseEntity,
-                        MenuGroupDto.class
+                        ResponseMenuGroupDto.class
                 );
         
         MenuItemDto hamburgerRequest = new MenuItemDto(
