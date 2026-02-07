@@ -1,7 +1,9 @@
 package com.malabudi.dineupbe.menu.controller;
 
-import com.malabudi.dineupbe.menu.dto.MenuItemDto;
+import com.malabudi.dineupbe.menu.dto.RequestMenuItemDto;
+import com.malabudi.dineupbe.menu.dto.ResponseMenuItemDto;
 import com.malabudi.dineupbe.menu.service.MenuItemService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,36 +20,36 @@ public class MenuItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuItemDto>> getMenuItem() {
-        List<MenuItemDto> res = menuItemService.getAllMenuItems();
+    public ResponseEntity<List<ResponseMenuItemDto>> getMenuItem() {
+        List<ResponseMenuItemDto> res = menuItemService.getAllMenuItems();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<MenuItemDto> getMenuItem(
+    public ResponseEntity<ResponseMenuItemDto> getMenuItem(
             @PathVariable Long id
     ) {
-        MenuItemDto res = menuItemService.getMenuItemById(id);
+        ResponseMenuItemDto res = menuItemService.getMenuItemById(id);
         return new ResponseEntity<>(res,  HttpStatus.OK);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MenuItemDto> addMenuItem(
-            @RequestBody MenuItemDto menuItemDto
+    public ResponseEntity<ResponseMenuItemDto> addMenuItem(
+            @Valid @RequestBody RequestMenuItemDto requestMenuItemDto
     ) {
-        MenuItemDto res = menuItemService.addMenuItem(menuItemDto);
+        ResponseMenuItemDto res = menuItemService.addMenuItem(requestMenuItemDto);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MenuItemDto> updateMenuItem(
+    public ResponseEntity<ResponseMenuItemDto> updateMenuItem(
             @PathVariable Long id,
-            @RequestBody MenuItemDto menuItemDto
+            @Valid @RequestBody RequestMenuItemDto requestMenuItemDto
     ) {
 
-        MenuItemDto res = menuItemService.updateMenuItem(id, menuItemDto);
+        ResponseMenuItemDto res = menuItemService.updateMenuItem(id, requestMenuItemDto);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

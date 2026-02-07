@@ -2,7 +2,7 @@ package com.malabudi.dineupbe.menu.dto;
 
 import java.math.BigDecimal;
 
-public record MenuItemDto(
+public record ResponseMenuItemDto(
         Long id,
         Long menuGroupId,
         String name,

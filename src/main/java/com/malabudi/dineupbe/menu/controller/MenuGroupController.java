@@ -48,7 +48,7 @@ public class MenuGroupController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseMenuGroupDto> updateMenuGroupByName(
             @PathVariable Long id,
-            @RequestBody UpdateMenuGroupDto updateMenuGroupDto
+            @Valid @RequestBody UpdateMenuGroupDto updateMenuGroupDto
     ) {
         ResponseMenuGroupDto res = menuGroupService.updateMenuGroupName(id, updateMenuGroupDto);
         return new ResponseEntity<>(res, HttpStatus.OK);
