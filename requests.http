@@ -71,15 +71,15 @@ Content-Type: application/json
 }
 
 ### GET request for all menu groups
-GET {{baseUrl}}/api/v1/menu-group
+GET {{baseUrl}}/api/v1/menu-groups
 Authorization: Bearer {{auth_token}}
 
 ### GET request for all menu group by id
-GET {{baseUrl}}/api/v1/menu-group/1
+GET {{baseUrl}}/api/v1/menu-groups/1
 Authorization: Bearer {{auth_token}}
 
 ### PATCH request for menu group name
-PATCH {{baseUrl}}/api/v1/menu-group/1
+PATCH {{baseUrl}}/api/v1/menu-groups/1
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -88,7 +88,7 @@ Content-Type: application/json
 }
 
 ### DELETE menu group
-DELETE {{baseUrl}}/api/v1/menu-group/1
+DELETE {{baseUrl}}/api/v1/menu-groups/1
 Authorization: Bearer {{auth_token}}
 
 ### GET request for all menu items
@@ -127,7 +127,7 @@ DELETE {{baseUrl}}/api/v1/menu-items/1
 Authorization: Bearer {{auth_token}}
 
 ### POST to place order
-POST {{baseUrl}}/api/v1/order
+POST {{baseUrl}}/api/v1/orders
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -145,15 +145,15 @@ Content-Type: application/json
 }
 
 ### GET all orders
-GET {{baseUrl}}/api/v1/order
+GET {{baseUrl}}/api/v1/orders
 Authorization: Bearer {{auth_token}}
 
 ### GET customer fetches their order
-GET {{baseUrl}}/api/v1/order/my-orders
+GET {{baseUrl}}/api/v1/orders/my-orders
 Authorization: Bearer {{auth_token}}
 
 ### PATCH order status
-PATCH {{baseUrl}}/api/v1/order
+PATCH {{baseUrl}}/api/v1/orders
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
