@@ -1,9 +1,8 @@
 package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
-import com.malabudi.dineupbe.menu.dto.MenuGroupDto;
+import com.malabudi.dineupbe.menu.dto.ResponseMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.UpdateMenuGroupDto;
-import com.malabudi.dineupbe.menu.exception.InvalidMenuGroupException;
 import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
 import com.malabudi.dineupbe.menu.mapper.MenuGroupMapper;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
@@ -21,31 +20,21 @@ public class MenuGroupService {
         this.menuGroupRepository = menuGroupRepository;
     }
 
-    private void validateMenuGroup(String menuGroupName) throws InvalidMenuGroupException {
-        if (
-                menuGroupName == null ||
-                menuGroupName.trim().isEmpty()
-        ) {
-            throw new InvalidMenuGroupException("Menu group name is required");
-        }
-    }
-
-    public List<MenuGroupDto> getMenuGroups() {
+    public List<ResponseMenuGroupDto> getMenuGroups() {
         return menuGroupRepository.findAll()
                 .stream()
                 .map(MenuGroupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public MenuGroupDto getMenuGroupById(Long id) {
+    public ResponseMenuGroupDto getMenuGroupById(Long id) {
         return  MenuGroupMapper.toDto(
                 menuGroupRepository.findById(id)
                         .orElseThrow(MenuGroupNotFoundException::new)
         );
     }
 
-    public MenuGroupDto addMenuGroup(CreateMenuGroupDto createMenuGroupDto) {
-        validateMenuGroup(createMenuGroupDto.name());
+    public ResponseMenuGroupDto addMenuGroup(CreateMenuGroupDto createMenuGroupDto) {
 
         MenuGroup menuGroup = new MenuGroup(
                 createMenuGroupDto.name()
@@ -55,11 +44,9 @@ public class MenuGroupService {
         return  MenuGroupMapper.toDto(menuGroup);
     }
 
-    public MenuGroupDto updateMenuGroupName(Long id, UpdateMenuGroupDto updateMenuGroupDto) {
+    public ResponseMenuGroupDto updateMenuGroupName(Long id, UpdateMenuGroupDto updateMenuGroupDto) {
         MenuGroup menuGroup = menuGroupRepository.findById(id)
                 .orElseThrow(MenuGroupNotFoundException::new);
-
-        validateMenuGroup(updateMenuGroupDto.name());
 
         menuGroup.setName(updateMenuGroupDto.name());
         MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
