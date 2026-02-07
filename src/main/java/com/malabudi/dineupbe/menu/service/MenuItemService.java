@@ -1,10 +1,11 @@
 package com.malabudi.dineupbe.menu.service;
 
+import com.malabudi.dineupbe.menu.dto.ResponseMenuItemDto;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
 import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
 import com.malabudi.dineupbe.menu.model.MenuItem;
-import com.malabudi.dineupbe.menu.dto.MenuItemDto;
+import com.malabudi.dineupbe.menu.dto.RequestMenuItemDto;
 import com.malabudi.dineupbe.menu.mapper.MenuItemMapper;
 import com.malabudi.dineupbe.menu.repository.MenuGroupRepository;
 import com.malabudi.dineupbe.menu.repository.MenuItemRepository;
@@ -22,7 +23,6 @@ public class MenuItemService {
 
     public MenuItemService(
             MenuItemRepository menuItemRepository,
-            MenuItemMapper menuItemMapper,
             MenuGroupRepository menuGroupRepository
     ) {
         this.menuItemRepository = menuItemRepository;
@@ -39,56 +39,27 @@ public class MenuItemService {
         );
     }
 
-    private void validateMenuItem(MenuItemDto menuItemDto) {
-        // ToDo - Validate the image after S3 is hooked up
-        // Is menu item name null
-        if (
-                menuItemDto.name() == null ||
-                menuItemDto.name().trim().isEmpty()
-        ) {
-            throw new InvalidMenuItemException("Menu item name cannot be empty");
-        }
-
-        // Is menu item price invalid
-        if (
-                menuItemDto.price() == null ||
-                menuItemDto.price().compareTo(BigDecimal.ZERO) <= 0
-        ) {
-            throw new InvalidMenuItemException("Menu item price must be greater than zero");
-        }
-
-        // Is menu item description valid
-        if (
-                menuItemDto.description() == null ||
-                menuItemDto.description().trim().isEmpty()
-        ) {
-            throw new InvalidMenuItemException("Menu item description cannot be empty");
-        }
-    }
-
-    public List<MenuItemDto> getAllMenuItems() {
+    public List<ResponseMenuItemDto> getAllMenuItems() {
         return menuItemRepository.findAll()
                 .stream()
                 .map(MenuItemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public MenuItemDto getMenuItemById(Long id) {
+    public ResponseMenuItemDto getMenuItemById(Long id) {
         return MenuItemMapper.toDto(
                 menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new)
         );
     }
 
-    public MenuItemDto addMenuItem(MenuItemDto menuItemDto) {
-        this.validateMenuItem(menuItemDto);
-
-        MenuGroup menuGroup = checkMenuGroup(menuItemDto.menuGroupId());
+    public ResponseMenuItemDto addMenuItem(RequestMenuItemDto requestMenuItemDto) {
+        MenuGroup menuGroup = checkMenuGroup(requestMenuItemDto.menuGroupId());
 
         MenuItem menuItem = new MenuItem(
-                menuItemDto.name(),
-                menuItemDto.description(),
-                menuItemDto.price(),
-                menuItemDto.imageUrl()
+                requestMenuItemDto.name(),
+                requestMenuItemDto.description(),
+                requestMenuItemDto.price(),
+                requestMenuItemDto.imageUrl()
         );
 
         menuItem.setMenuGroup(menuGroup);
@@ -97,23 +68,21 @@ public class MenuItemService {
         return  MenuItemMapper.toDto(menuItem);
     }
 
-    public MenuItemDto updateMenuItem(Long id, MenuItemDto menuItemDto) {
+    public ResponseMenuItemDto updateMenuItem(Long id, RequestMenuItemDto requestMenuItemDto) {
         MenuItem menuItem = menuItemRepository.findById(id)
                 .orElseThrow(MenuItemNotFoundException::new);
 
-        validateMenuItem(menuItemDto);
-
-        menuItem.setName(menuItemDto.name());
-        menuItem.setDescription(menuItemDto.description());
-        menuItem.setPrice(menuItemDto.price());
-        menuItem.setImageUrl(menuItemDto.imageUrl());
+        menuItem.setName(requestMenuItemDto.name());
+        menuItem.setDescription(requestMenuItemDto.description());
+        menuItem.setPrice(requestMenuItemDto.price());
+        menuItem.setImageUrl(requestMenuItemDto.imageUrl());
 
         // Update menu group ID if menu item is in a different group
         if (
-                menuItemDto.menuGroupId() != null &&
-                !Objects.equals(menuItem.getMenuGroup().getId(), menuItemDto.menuGroupId())
+                requestMenuItemDto.menuGroupId() != null &&
+                !Objects.equals(menuItem.getMenuGroup().getId(), requestMenuItemDto.menuGroupId())
         ) {
-            MenuGroup menuGroup = checkMenuGroup(menuItemDto.menuGroupId());
+            MenuGroup menuGroup = checkMenuGroup(requestMenuItemDto.menuGroupId());
             menuItem.setMenuGroup(menuGroup);
         }
 

@@ -7,7 +7,7 @@ import com.malabudi.dineupbe.common.util.OrderStatus;
 import com.malabudi.dineupbe.common.util.Role;
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.ResponseMenuGroupDto;
-import com.malabudi.dineupbe.menu.dto.MenuItemDto;
+import com.malabudi.dineupbe.menu.dto.RequestMenuItemDto;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
 import com.malabudi.dineupbe.order.dto.LineItemDto;
 import com.malabudi.dineupbe.order.dto.LineItemRequestDto;
@@ -122,7 +122,7 @@ public class OrderIntegrationTests {
                         ResponseMenuGroupDto.class
                 );
         
-        MenuItemDto hamburgerRequest = new MenuItemDto(
+        RequestMenuItemDto hamburgerRequest = new RequestMenuItemDto(
                 null,
                 mainCourseResponse.getBody() != null ? mainCourseResponse.getBody().id() : null,
                 "Hamburger",
@@ -130,13 +130,13 @@ public class OrderIntegrationTests {
                 new BigDecimal("9.99"),
                 null
         );
-        HttpEntity<MenuItemDto> hamburgerEntity = new HttpEntity<>(hamburgerRequest, adminHeaders);
+        HttpEntity<RequestMenuItemDto> hamburgerEntity = new HttpEntity<>(hamburgerRequest, adminHeaders);
 
-        ResponseEntity<MenuItemDto> hamburgerResponse =
+        ResponseEntity<RequestMenuItemDto> hamburgerResponse =
                 restTemplate.postForEntity(
                         "/api/v1/menu-items",
                         hamburgerEntity,
-                        MenuItemDto.class
+                        RequestMenuItemDto.class
                 );
         Long menuItemId = hamburgerResponse.getBody() != null ? hamburgerResponse.getBody().id() : null;
 
@@ -176,7 +176,7 @@ public class OrderIntegrationTests {
         customerHeaders.setBearerAuth(customerToken);
 
         // When: Customer attempts to create menu item
-        MenuItemDto menuItem = new MenuItemDto(
+        RequestMenuItemDto menuItem = new RequestMenuItemDto(
                 null,
                 null,
                 "Burger",
@@ -184,11 +184,11 @@ public class OrderIntegrationTests {
                 new BigDecimal("8.99"),
                 null
         );
-        HttpEntity<MenuItemDto> menuItemEntity = new HttpEntity<>(menuItem, customerHeaders);
-        ResponseEntity<MenuItemDto> menuItemResponse = restTemplate.postForEntity(
+        HttpEntity<RequestMenuItemDto> menuItemEntity = new HttpEntity<>(menuItem, customerHeaders);
+        ResponseEntity<RequestMenuItemDto> menuItemResponse = restTemplate.postForEntity(
                 "api/v1/menu-items",
                 menuItemEntity,
-                MenuItemDto.class
+                RequestMenuItemDto.class
         );
 
         // Then: Deny access to create menu item
