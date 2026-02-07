@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record OrderDto(
+public record ResponseOrderDto(
         Long id,
         Long customerId,
         String customerName,
-        List <LineItemDto> items,
+        List <ResponseLineItemDto> items,
         LocalDateTime orderDate,
         OrderStatus status,
         BigDecimal total

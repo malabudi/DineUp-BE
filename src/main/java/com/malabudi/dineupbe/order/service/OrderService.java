@@ -4,8 +4,8 @@ import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.model.MenuItem;
 import com.malabudi.dineupbe.menu.repository.MenuItemRepository;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
-import com.malabudi.dineupbe.order.dto.LineItemRequestDto;
-import com.malabudi.dineupbe.order.dto.OrderDto;
+import com.malabudi.dineupbe.order.dto.RequestLineItemDto;
+import com.malabudi.dineupbe.order.dto.ResponseOrderDto;
 import com.malabudi.dineupbe.order.dto.UpdateOrderStatusDto;
 import com.malabudi.dineupbe.order.mapper.OrderMapper;
 import com.malabudi.dineupbe.order.model.LineItem;
@@ -31,14 +31,14 @@ public class OrderService {
         this.menuItemRepository = menuItemRepository;
     }
 
-    public OrderDto createOrder(CreateOrderDto createOrderDto, String email) {
+    public ResponseOrderDto createOrder(CreateOrderDto createOrderDto, String email) {
         User customer = userRepository.findByEmail(email)
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
         Order order = new Order();
         order.setCustomer(customer);
 
-        for (LineItemRequestDto lineItemDto : createOrderDto.items()) {
+        for (RequestLineItemDto lineItemDto : createOrderDto.items()) {
             MenuItem menuItem = menuItemRepository.findById(lineItemDto.menuItemId())
                     .orElseThrow(()-> new MenuItemNotFoundException("Menu item not found"));
 
@@ -51,14 +51,14 @@ public class OrderService {
         return OrderMapper.toDto(savedOrder);
     }
 
-    public List<OrderDto> getAllOrders() {
+    public List<ResponseOrderDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
                 .map(OrderMapper::toDto)
                 .toList();
     }
 
-    public List<OrderDto> getCustomerOrders(String email) {
+    public List<ResponseOrderDto> getCustomerOrders(String email) {
         User customer = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -71,7 +71,7 @@ public class OrderService {
                 .toList();
     }
 
-    public OrderDto updateOrderStatus(UpdateOrderStatusDto updateOrderDto) {
+    public ResponseOrderDto updateOrderStatus(UpdateOrderStatusDto updateOrderDto) {
         Order order = orderRepository.findById(updateOrderDto.orderId())
                 .orElseThrow(RuntimeException::new);
 
