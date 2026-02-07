@@ -1,4 +1,4 @@
-package com.malabudi.dineupbe;
+package com.malabudi.dineupbe.journey;
 
 import com.malabudi.dineupbe.auth.data.AuthenticationRequest;
 import com.malabudi.dineupbe.auth.data.AuthenticationResponse;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureTestRestTemplate
-public class OrderIntegrationTests {
+public class OrderIT {
     @Autowired
     private UserRepository userRepository;
 
