@@ -1,5 +1,6 @@
-package com.malabudi.dineupbe;
+package com.malabudi.dineupbe.journey;
 
+import com.malabudi.dineupbe.AbstractTestcontainers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -11,7 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest
 @ActiveProfiles("test")
 @Testcontainers
-class DineUpBeApplicationTests  extends AbstractTestcontainers {
+class SmokeIT extends AbstractTestcontainers {
 
 	@Container
 	@ServiceConnection
