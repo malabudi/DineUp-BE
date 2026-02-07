@@ -1,11 +1,11 @@
 package com.malabudi.dineupbe.order.mapper;
 
-import com.malabudi.dineupbe.order.dto.OrderDto;
+import com.malabudi.dineupbe.order.dto.ResponseOrderDto;
 import com.malabudi.dineupbe.order.model.Order;
 
 public class OrderMapper {
-    public static OrderDto toDto(Order order) {
-        return new OrderDto(
+    public static ResponseOrderDto toDto(Order order) {
+        return new ResponseOrderDto(
                 order.getId(),
                 order.getCustomer().getId(),
                 order.getCustomer().getFirstName() +

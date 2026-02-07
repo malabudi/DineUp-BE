@@ -1,11 +1,11 @@
 package com.malabudi.dineupbe.order.mapper;
 
-import com.malabudi.dineupbe.order.dto.LineItemDto;
+import com.malabudi.dineupbe.order.dto.ResponseLineItemDto;
 import com.malabudi.dineupbe.order.model.LineItem;
 
 public class LineItemMapper {
-    public static LineItemDto toDto(LineItem lineItem) {
-        return new LineItemDto(
+    public static ResponseLineItemDto toDto(LineItem lineItem) {
+        return new ResponseLineItemDto(
                 lineItem.getId(),
                 lineItem.getOrder().getId(),
                 lineItem.getMenuItem().getId(),

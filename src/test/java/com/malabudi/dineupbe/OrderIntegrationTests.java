@@ -9,9 +9,9 @@ import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.ResponseMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.RequestMenuItemDto;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
-import com.malabudi.dineupbe.order.dto.LineItemDto;
-import com.malabudi.dineupbe.order.dto.LineItemRequestDto;
-import com.malabudi.dineupbe.order.dto.OrderDto;
+import com.malabudi.dineupbe.order.dto.ResponseLineItemDto;
+import com.malabudi.dineupbe.order.dto.RequestLineItemDto;
+import com.malabudi.dineupbe.order.dto.ResponseOrderDto;
 import com.malabudi.dineupbe.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,27 +145,27 @@ public class OrderIntegrationTests {
         customerHeaders.setBearerAuth(customerToken);
 
         CreateOrderDto orderRequest = new CreateOrderDto(
-                List.of(new LineItemRequestDto(menuItemId, 3))
+                List.of(new RequestLineItemDto(menuItemId, 3))
         );
 
         HttpEntity<CreateOrderDto> orderEntity = new HttpEntity<>(orderRequest, customerHeaders);
-        ResponseEntity<OrderDto> orderResponse = restTemplate.postForEntity(
+        ResponseEntity<ResponseOrderDto> orderResponse = restTemplate.postForEntity(
                 "/api/v1/order",
                 orderEntity,
-                OrderDto.class
+                ResponseOrderDto.class
         );
 
         // Then: Order is successfully placed
         assertThat(orderResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        OrderDto order = orderResponse.getBody();
+        ResponseOrderDto order = orderResponse.getBody();
         assertThat(order).isNotNull();
         assertThat(order.id()).isNotNull();
         assertThat(order.status()).isEqualTo(OrderStatus.PENDING);
         assertThat(order.total()).isEqualByComparingTo(new BigDecimal("29.97"));
         assertThat(order.items()).hasSize(1);
         assertThat(order.items().getFirst())
-                .returns("Hamburger", LineItemDto::menuItemName)
-                .returns(3, LineItemDto::quantity);
+                .returns("Hamburger", ResponseLineItemDto::menuItemName)
+                .returns(3, ResponseLineItemDto::quantity);
     }
 
     // TODO: Move to MenuIntegrationTests.java
