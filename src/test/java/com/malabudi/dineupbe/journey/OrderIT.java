@@ -1,5 +1,6 @@
-package com.malabudi.dineupbe;
+package com.malabudi.dineupbe.journey;
 
+import com.malabudi.dineupbe.AbstractTestcontainers;
 import com.malabudi.dineupbe.auth.data.AuthenticationRequest;
 import com.malabudi.dineupbe.auth.data.AuthenticationResponse;
 import com.malabudi.dineupbe.auth.data.RegisterRequest;
@@ -32,7 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureTestRestTemplate
-public class OrderIntegrationTests {
+public class OrderIT extends AbstractTestcontainers {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -117,7 +119,7 @@ public class OrderIntegrationTests {
 
         ResponseEntity<ResponseMenuGroupDto> mainCourseResponse =
                 restTemplate.postForEntity(
-                        "/api/v1/menu-group",
+                        "/api/v1/menu-groups",
                         mainCourseEntity,
                         ResponseMenuGroupDto.class
                 );
@@ -150,7 +152,7 @@ public class OrderIntegrationTests {
 
         HttpEntity<CreateOrderDto> orderEntity = new HttpEntity<>(orderRequest, customerHeaders);
         ResponseEntity<ResponseOrderDto> orderResponse = restTemplate.postForEntity(
-                "/api/v1/order",
+                "/api/v1/orders",
                 orderEntity,
                 ResponseOrderDto.class
         );
