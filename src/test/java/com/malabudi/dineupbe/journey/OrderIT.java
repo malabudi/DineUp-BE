@@ -119,7 +119,7 @@ public class OrderIT extends AbstractTestcontainers {
 
         ResponseEntity<ResponseMenuGroupDto> mainCourseResponse =
                 restTemplate.postForEntity(
-                        "/api/v1/menu-group",
+                        "/api/v1/menu-groups",
                         mainCourseEntity,
                         ResponseMenuGroupDto.class
                 );
@@ -152,7 +152,7 @@ public class OrderIT extends AbstractTestcontainers {
 
         HttpEntity<CreateOrderDto> orderEntity = new HttpEntity<>(orderRequest, customerHeaders);
         ResponseEntity<ResponseOrderDto> orderResponse = restTemplate.postForEntity(
-                "/api/v1/order",
+                "/api/v1/orders",
                 orderEntity,
                 ResponseOrderDto.class
         );
