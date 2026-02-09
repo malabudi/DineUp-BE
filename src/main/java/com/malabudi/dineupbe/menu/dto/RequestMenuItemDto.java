@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record RequestMenuItemDto(
-        Long id,
+        @NotNull(message = "Menu group ID is required")
         Long menuGroupId,
 
         @NotBlank(message = "Menu item name is required")

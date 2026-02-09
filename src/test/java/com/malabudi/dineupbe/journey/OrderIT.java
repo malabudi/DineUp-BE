@@ -9,6 +9,7 @@ import com.malabudi.dineupbe.common.util.Role;
 import com.malabudi.dineupbe.menu.dto.CreateMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.ResponseMenuGroupDto;
 import com.malabudi.dineupbe.menu.dto.RequestMenuItemDto;
+import com.malabudi.dineupbe.menu.dto.ResponseMenuItemDto;
 import com.malabudi.dineupbe.order.dto.CreateOrderDto;
 import com.malabudi.dineupbe.order.dto.ResponseLineItemDto;
 import com.malabudi.dineupbe.order.dto.RequestLineItemDto;
@@ -125,7 +126,6 @@ public class OrderIT extends AbstractTestcontainers {
                 );
         
         RequestMenuItemDto hamburgerRequest = new RequestMenuItemDto(
-                null,
                 mainCourseResponse.getBody() != null ? mainCourseResponse.getBody().id() : null,
                 "Hamburger",
                 "A beef patty placed inside a pretzel bun, served with lettuce, tomato, onion, pickles, and famous housemade aioli.",
@@ -134,11 +134,11 @@ public class OrderIT extends AbstractTestcontainers {
         );
         HttpEntity<RequestMenuItemDto> hamburgerEntity = new HttpEntity<>(hamburgerRequest, adminHeaders);
 
-        ResponseEntity<RequestMenuItemDto> hamburgerResponse =
+        ResponseEntity<ResponseMenuItemDto> hamburgerResponse =
                 restTemplate.postForEntity(
                         "/api/v1/menu-items",
                         hamburgerEntity,
-                        RequestMenuItemDto.class
+                        ResponseMenuItemDto.class
                 );
         Long menuItemId = hamburgerResponse.getBody() != null ? hamburgerResponse.getBody().id() : null;
 
@@ -179,8 +179,7 @@ public class OrderIT extends AbstractTestcontainers {
 
         // When: Customer attempts to create menu item
         RequestMenuItemDto menuItem = new RequestMenuItemDto(
-                null,
-                null,
+                1L,
                 "Burger",
                 "Tasty test burger",
                 new BigDecimal("8.99"),
