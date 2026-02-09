@@ -33,10 +33,27 @@ public class MenuItemServiceTest {
     private MenuGroupRepository menuGroupRepository;
 
     private MenuItemService underTest;
+    private MenuGroup defaultMenuGroup;
+    private MenuItem defaultMenuItem;
+
+    private final Long MENU_GROUP_ID = 1L;
+    private final Long MENU_ITEM_ID = 1L;
 
     @BeforeEach
     void setUp() {
         underTest = new MenuItemService(menuItemRepository, menuGroupRepository);
+
+        defaultMenuGroup = new MenuGroup("Main Course");
+        defaultMenuGroup.setId(MENU_GROUP_ID);
+
+        defaultMenuItem = new MenuItem(
+                "Hamburger",
+                "Tasty burger",
+                new BigDecimal("8.99"),
+                null
+        );
+        defaultMenuItem.setId(MENU_ITEM_ID);
+        defaultMenuItem.setMenuGroup(defaultMenuGroup);
     }
 
     @Test
@@ -51,26 +68,13 @@ public class MenuItemServiceTest {
     @Test
     void getMenuItemById_shouldReturnMenuItemById_whenIdExists() {
         // Arrange
-        MenuGroup dummyMenuGroup = new MenuGroup("Main Course");
-        dummyMenuGroup.setId(1L);
-
-        Long menuItemId = 1L;
-        MenuItem menuItem = new MenuItem(
-                "Hamburger",
-                "Tasty burger",
-                new BigDecimal("8.99"),
-                null
-        );
-        menuItem.setMenuGroup(dummyMenuGroup);
-        menuItem.setId(menuItemId);
-
-        when(menuItemRepository.findById(menuItemId)).thenReturn(Optional.of(menuItem));
+        when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.of(defaultMenuItem));
 
         // Act
-        ResponseMenuItemDto responseMenuItemDto = underTest.getMenuItemById(menuItem.getId());
+        ResponseMenuItemDto responseMenuItemDto = underTest.getMenuItemById(defaultMenuItem.getId());
 
         // Assert
-        verify(menuItemRepository).findById(menuItemId);
+        verify(menuItemRepository).findById(MENU_ITEM_ID);
         assertThat(responseMenuItemDto.name()).isEqualTo("Hamburger");
         assertThat(responseMenuItemDto.description()).isEqualTo("Tasty burger");
         assertThat(responseMenuItemDto.price()).isEqualTo(new BigDecimal("8.99"));
@@ -79,12 +83,10 @@ public class MenuItemServiceTest {
     @Test
     void getMenuItemById_shouldThrowException_whenIdNotFound() {
         // Arrange
-        Long menuItemId = 1L;
-
-        when(menuItemRepository.findById(menuItemId)).thenReturn(Optional.empty());
+        when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> underTest.getMenuItemById(menuItemId))
+        assertThatThrownBy(() -> underTest.getMenuItemById(MENU_ITEM_ID))
                 .isInstanceOf(MenuItemNotFoundException.class)
                 .hasMessage("Menu item not found");
     }
@@ -92,16 +94,13 @@ public class MenuItemServiceTest {
     @Test
     void addMenuItem_shouldSaveMenuItem_whenValidMenuItemSent() {
         // Arrange
-        MenuGroup dummyMenuGroup = new MenuGroup("Main Course");
-        dummyMenuGroup.setId(1L);
-
         when(
-                menuGroupRepository.findById(1L))
-                .thenReturn(Optional.of(dummyMenuGroup)
+                menuGroupRepository.findById(MENU_GROUP_ID))
+                .thenReturn(Optional.of(defaultMenuGroup)
         );
 
         RequestMenuItemDto request = new RequestMenuItemDto(
-                1L,
+                MENU_GROUP_ID,
                 "Hamburger",
                 "Tasty burger",
                 new BigDecimal("8.99"),
@@ -125,20 +124,20 @@ public class MenuItemServiceTest {
     @Test
     void addMenuItem_shouldThrowException_whenMenuGroupNotFound() {
         // Arrange
-        Long menuGroupId = 1000L;
         RequestMenuItemDto request = new RequestMenuItemDto(
-                menuGroupId,
-                "Pizza",
-                "Cheese and dough",
+                MENU_GROUP_ID,
+                "Hamburger",
+                "Tasty burger",
                 new BigDecimal("8.99"),
-                null);
+                null
+        );
 
-        when(menuGroupRepository.findById(menuGroupId)).thenReturn(Optional.empty());
+        when(menuGroupRepository.findById(MENU_GROUP_ID)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> underTest.addMenuItem(request))
                 .isInstanceOf(MenuGroupNotFoundException.class)
-                .hasMessage("Menu group with id " + menuGroupId + " not found");
+                .hasMessage("Menu group with id " + MENU_GROUP_ID + " not found");
 
         verify(menuItemRepository, never()).save(any());
     }
@@ -148,10 +147,11 @@ public class MenuItemServiceTest {
         // Arrange
         RequestMenuItemDto request = new RequestMenuItemDto(
                 null,
-                "Pizza",
-                "Cheese and dough",
+                "Hamburger",
+                "Tasty burger",
                 new BigDecimal("8.99"),
-                null);
+                null
+        );
 
         // Act & Assert
         assertThatThrownBy(() -> underTest.addMenuItem(request))
@@ -168,101 +168,68 @@ public class MenuItemServiceTest {
         MenuGroup newMenuGroup = new MenuGroup("New Menu Group");
         newMenuGroup.setId(newMenuGroupId);
 
-        MenuGroup oldMenuGroup = new MenuGroup("Old Menu Group");
-        oldMenuGroup.setId(1L);
-
-        Long existingMenuItemId = 3L;
-        MenuItem existingMenuItem = new MenuItem(
-                "Pizza",
-                "Cheese and Dough",
-                new BigDecimal("8.99"),
-                null
-        );
-        existingMenuItem.setMenuGroup(oldMenuGroup);
-
         RequestMenuItemDto request = new RequestMenuItemDto(
                 newMenuGroupId,
-                "Pizza",
-                "Cheese and Dough",
+                "Hamburger",
+                "Tasty burger",
                 new BigDecimal("8.99"),
                 null
         );
 
-        when(menuItemRepository.findById(existingMenuItemId)).thenReturn(Optional.of(existingMenuItem));
+        when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.of(defaultMenuItem));
         when(menuGroupRepository.findById(newMenuGroupId)).thenReturn(Optional.of(newMenuGroup));
-        when(menuItemRepository.save(existingMenuItem)).thenReturn(existingMenuItem);
+        when(menuItemRepository.save(defaultMenuItem)).thenReturn(defaultMenuItem);
 
         ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
 
         // Act
-        underTest.updateMenuItem(existingMenuItemId, request);
+        underTest.updateMenuItem(MENU_ITEM_ID, request);
 
         // Assert
         verify(menuItemRepository).save(captor.capture());
         MenuItem capturedMenuItem = captor.getValue();
 
         assertThat(capturedMenuItem.getMenuGroup().getId()).isEqualTo(newMenuGroupId);
-        assertThat(capturedMenuItem.getName()).isEqualTo("Pizza");
-        assertThat(capturedMenuItem.getDescription()).isEqualTo("Cheese and Dough");
+        assertThat(capturedMenuItem.getName()).isEqualTo("Hamburger");
+        assertThat(capturedMenuItem.getDescription()).isEqualTo("Tasty burger");
     }
 
     @Test
-    void updateMenuItem_shouldUpdateMenuGroup_whenMenuItemIsDifferent() {
+    void updateMenuItem_shouldMenuItem_whenMenuItemIsDifferent() {
         // Arrange
-        MenuGroup menuGroup = new MenuGroup("Pizza Menu Group");
-        Long menuGroupId = 1L;
-        menuGroup.setId(menuGroupId);
-
-        Long menuItemId = 1L;
-        MenuItem oldMenuItem = new MenuItem(
+        RequestMenuItemDto request = new RequestMenuItemDto(
+                MENU_GROUP_ID,
                 "Pizza",
                 "Cheese and Dough",
-                new BigDecimal("8.99"),
-                null
-        );
-        oldMenuItem.setMenuGroup(menuGroup);
-
-        RequestMenuItemDto request = new RequestMenuItemDto(
-                menuGroupId,
-                "New Pizza",
-                "New Cheese and Dough",
                 new BigDecimal("18.99"),
                 null
         );
 
-        MenuItem newMenuItem = new MenuItem(
-                "New Pizza",
-                "New Cheese and Dough",
-                new BigDecimal("18.99"),
-                null
-        );
-        newMenuItem.setMenuGroup(menuGroup);
-
-        when(menuItemRepository.findById(menuItemId)).thenReturn(Optional.of(oldMenuItem));
-        when(menuItemRepository.save(any())).thenReturn(newMenuItem);
+        when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.of(defaultMenuItem));
+        when(menuItemRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
         ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
 
         // Act
-        underTest.updateMenuItem(menuItemId, request);
+        underTest.updateMenuItem(MENU_ITEM_ID, request);
 
         // Assert
         verify(menuItemRepository).save(captor.capture());
         MenuItem menuItem = captor.getValue();
 
-        assertThat(menuItem.getMenuGroup().getId()).isEqualTo(menuGroupId);
-        assertThat(menuItem.getMenuGroup().getName()).isEqualTo("Pizza Menu Group");
-        assertThat(menuItem.getName()).isEqualTo("New Pizza");
+        assertThat(menuItem.getMenuGroup().getId()).isEqualTo(MENU_GROUP_ID);
+        assertThat(menuItem.getMenuGroup().getName()).isEqualTo("Main Course");
+        assertThat(menuItem.getName()).isEqualTo("Pizza");
+        assertThat( menuItem.getDescription()).isEqualTo("Cheese and Dough");
     }
 
     @Test
     void updateMenuItem_shouldThrowException_whenMenuItemNotFound() {
         // Arrange
-        Long menuItemId = 1L;
-        when(menuItemRepository.findById(menuItemId)).thenReturn(Optional.empty());
+        when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> underTest.updateMenuItem(menuItemId, new RequestMenuItemDto(
+        assertThatThrownBy(() -> underTest.updateMenuItem(MENU_ITEM_ID, new RequestMenuItemDto(
                 1L,
                 "Pizza",
                 "Cheese and Dough",
@@ -278,24 +245,22 @@ public class MenuItemServiceTest {
     @Test
     void deleteMenuItem_shouldDeleteMenuItem_whenMenuItemFound() {
         // Arrange
-        Long existingMenuItemId = 1L;
-        when(menuItemRepository.existsById(existingMenuItemId)).thenReturn(true);
+        when(menuItemRepository.existsById(MENU_ITEM_ID)).thenReturn(true);
 
         // Act
-        underTest.deleteMenuItem(existingMenuItemId);
+        underTest.deleteMenuItem(MENU_ITEM_ID);
 
         // Assert
-        verify(menuItemRepository).deleteById(existingMenuItemId);
+        verify(menuItemRepository).deleteById(MENU_ITEM_ID);
     }
 
     @Test
     void deleteMenuItem_shouldThrowException_whenMenuItemNotFound() {
         // Arrange
-        Long existingMenuItemId = 1L;
-        when(menuItemRepository.existsById(existingMenuItemId)).thenReturn(false);
+        when(menuItemRepository.existsById(MENU_ITEM_ID)).thenReturn(false);
 
         // Act & Assert
-        assertThatThrownBy(() -> underTest.deleteMenuItem(existingMenuItemId))
+        assertThatThrownBy(() -> underTest.deleteMenuItem(MENU_ITEM_ID))
                 .isInstanceOf(MenuItemNotFoundException.class);
 
         verify(menuItemRepository, never()).deleteById(any(Long.class));
