@@ -1,8 +1,7 @@
-package com.malabudi.dineupbe.menugroup;
+package com.malabudi.dineupbe.menu.repository;
 
 import com.malabudi.dineupbe.AbstractTestcontainers;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
-import com.malabudi.dineupbe.menu.repository.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
