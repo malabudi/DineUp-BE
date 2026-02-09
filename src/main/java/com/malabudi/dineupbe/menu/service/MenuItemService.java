@@ -2,6 +2,7 @@ package com.malabudi.dineupbe.menu.service;
 
 import com.malabudi.dineupbe.menu.dto.ResponseMenuItemDto;
 import com.malabudi.dineupbe.menu.exception.InvalidMenuItemException;
+import com.malabudi.dineupbe.menu.exception.MenuGroupNotFoundException;
 import com.malabudi.dineupbe.menu.exception.MenuItemNotFoundException;
 import com.malabudi.dineupbe.menu.model.MenuGroup;
 import com.malabudi.dineupbe.menu.model.MenuItem;
@@ -35,7 +36,7 @@ public class MenuItemService {
         }
 
         return  menuGroupRepository.findById(menuGroupId).orElseThrow(
-                () -> new MenuItemNotFoundException("Menu group with id " + menuGroupId + " not found")
+                () -> new MenuGroupNotFoundException(menuGroupId)
         );
     }
 
