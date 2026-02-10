@@ -66,7 +66,7 @@ public class MenuItemServiceTest {
     }
 
     @Test
-    void getMenuItemById_shouldReturnMenuItemById_whenIdExists() {
+    void getMenuItemById_shouldReturnMenuItemById_whenMenuGroupExists() {
         // Arrange
         when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.of(defaultMenuItem));
 
@@ -107,14 +107,14 @@ public class MenuItemServiceTest {
                 null
         );
 
-        ArgumentCaptor<MenuItem> menuItemArgumentCaptor = ArgumentCaptor.forClass(MenuItem.class);
+        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
 
         // Act
         underTest.addMenuItem(request);
 
         // Assert
-        verify(menuItemRepository).save(menuItemArgumentCaptor.capture());
-        MenuItem capturedMenuItem = menuItemArgumentCaptor.getValue();
+        verify(menuItemRepository).save(captor.capture());
+        MenuItem capturedMenuItem = captor.getValue();
 
         assertThat(capturedMenuItem.getName()).isEqualTo("Hamburger");
         assertThat(capturedMenuItem.getDescription()).isEqualTo("Tasty burger");
