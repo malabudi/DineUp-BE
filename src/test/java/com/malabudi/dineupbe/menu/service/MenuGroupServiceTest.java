@@ -66,7 +66,7 @@ public class MenuGroupServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> underTest.getMenuGroupById(MENU_GROUP_ID))
                 .isInstanceOf(MenuGroupNotFoundException.class)
-                .hasMessage("Menu group not found");
+                .hasMessage("Menu group with id " + MENU_GROUP_ID + " not found");
     }
 
     @Test
@@ -116,7 +116,7 @@ public class MenuGroupServiceTest {
                 "Appetizers"
         )))
                 .isInstanceOf(MenuGroupNotFoundException.class)
-                .hasMessage("Menu group not found");
+                .hasMessage("Menu group with id " + MENU_GROUP_ID + " not found");
     }
 
     @Test

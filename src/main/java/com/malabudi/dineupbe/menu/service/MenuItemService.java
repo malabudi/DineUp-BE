@@ -49,7 +49,7 @@ public class MenuItemService {
 
     public ResponseMenuItemDto getMenuItemById(Long id) {
         return MenuItemMapper.toDto(
-                menuItemRepository.findById(id).orElseThrow(MenuItemNotFoundException::new)
+                menuItemRepository.findById(id).orElseThrow(() -> new MenuItemNotFoundException(id))
         );
     }
 
@@ -71,7 +71,7 @@ public class MenuItemService {
 
     public ResponseMenuItemDto updateMenuItem(Long id, RequestMenuItemDto requestMenuItemDto) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(MenuItemNotFoundException::new);
+                .orElseThrow(() -> new MenuItemNotFoundException(id));
 
         menuItem.setName(requestMenuItemDto.name());
         menuItem.setDescription(requestMenuItemDto.description());
