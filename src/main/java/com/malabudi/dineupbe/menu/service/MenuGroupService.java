@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MenuGroupService {
+
     private final MenuGroupRepository menuGroupRepository;
 
     MenuGroupService(MenuGroupRepository menuGroupRepository) {
@@ -35,7 +36,6 @@ public class MenuGroupService {
     }
 
     public ResponseMenuGroupDto addMenuGroup(CreateMenuGroupDto createMenuGroupDto) {
-
         MenuGroup menuGroup = new MenuGroup(
                 createMenuGroupDto.name()
         );
