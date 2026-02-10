@@ -63,8 +63,7 @@ public class OrderService {
                 .orElseThrow(UserNotFoundException::new);
 
         List<Order> orders = Collections
-                .singletonList(orderRepository.findByCustomer(customer)
-                .orElseThrow(RuntimeException::new));
+                .singletonList((Order) orderRepository.findByCustomerId(customer.getId()));
 
         return orders.stream()
                 .map(OrderMapper::toDto)
