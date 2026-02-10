@@ -40,7 +40,7 @@ public class OrderService {
 
         for (RequestLineItemDto lineItemDto : createOrderDto.items()) {
             MenuItem menuItem = menuItemRepository.findById(lineItemDto.menuItemId())
-                    .orElseThrow(()-> new MenuItemNotFoundException("Menu item not found"));
+                    .orElseThrow(() -> new MenuItemNotFoundException(lineItemDto.menuItemId()));
 
             order.getLineItems().add(new LineItem(order, menuItem, lineItemDto.quantity()));
         }

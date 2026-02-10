@@ -88,7 +88,7 @@ public class MenuItemServiceTest {
         // Act & Assert
         assertThatThrownBy(() -> underTest.getMenuItemById(MENU_ITEM_ID))
                 .isInstanceOf(MenuItemNotFoundException.class)
-                .hasMessage("Menu item not found");
+                .hasMessage("Menu item with id " + MENU_ITEM_ID + " not found");
     }
 
     @Test
@@ -237,7 +237,7 @@ public class MenuItemServiceTest {
                 null
         )))
                 .isInstanceOf(MenuItemNotFoundException.class)
-                .hasMessage("Menu item not found");
+                .hasMessage("Menu item with id " + MENU_ITEM_ID + " not found");
 
         verify(menuItemRepository, never()).save(any());
     }

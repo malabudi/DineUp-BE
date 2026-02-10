@@ -31,7 +31,7 @@ public class MenuGroupService {
     public ResponseMenuGroupDto getMenuGroupById(Long id) {
         return  MenuGroupMapper.toDto(
                 menuGroupRepository.findById(id)
-                        .orElseThrow(MenuGroupNotFoundException::new)
+                        .orElseThrow(() -> new MenuGroupNotFoundException(id))
         );
     }
 
@@ -46,7 +46,7 @@ public class MenuGroupService {
 
     public ResponseMenuGroupDto updateMenuGroupName(Long id, UpdateMenuGroupDto updateMenuGroupDto) {
         MenuGroup menuGroup = menuGroupRepository.findById(id)
-                .orElseThrow(MenuGroupNotFoundException::new);
+                .orElseThrow(() -> new MenuGroupNotFoundException(id));
 
         menuGroup.setName(updateMenuGroupDto.name());
         MenuGroup updatedMenuGroup = menuGroupRepository.save(menuGroup);
