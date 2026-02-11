@@ -7,6 +7,7 @@ import com.malabudi.dineupbe.order.dto.CreateOrderDto;
 import com.malabudi.dineupbe.order.dto.RequestLineItemDto;
 import com.malabudi.dineupbe.order.dto.ResponseOrderDto;
 import com.malabudi.dineupbe.order.dto.UpdateOrderStatusDto;
+import com.malabudi.dineupbe.order.exception.OrderNotFoundException;
 import com.malabudi.dineupbe.order.mapper.OrderMapper;
 import com.malabudi.dineupbe.order.model.LineItem;
 import com.malabudi.dineupbe.order.model.Order;
@@ -33,7 +34,7 @@ public class OrderService {
 
     public ResponseOrderDto createOrder(CreateOrderDto createOrderDto, String email) {
         User customer = userRepository.findByEmail(email)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         Order order = new Order();
         order.setCustomer(customer);
@@ -62,8 +63,7 @@ public class OrderService {
         User customer = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Order> orders = Collections
-                .singletonList((Order) orderRepository.findByCustomerId(customer.getId()));
+        List<Order> orders = orderRepository.findByCustomerId(customer.getId());
 
         return orders.stream()
                 .map(OrderMapper::toDto)
@@ -72,7 +72,7 @@ public class OrderService {
 
     public ResponseOrderDto updateOrderStatus(UpdateOrderStatusDto updateOrderDto) {
         Order order = orderRepository.findById(updateOrderDto.orderId())
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(OrderNotFoundException::new);
 
         order.setOrderStatus(updateOrderDto.orderStatus());
         Order updatedOrder = orderRepository.save(order);
