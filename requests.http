@@ -57,10 +57,6 @@ Content-Type: application/json
     }
 %}
 
-### GET request to Dine Up Application
-GET {{baseUrl}}/api/v1/
-Authorization: Bearer {{auth_token}}
-
 ### POST request for menu group
 POST {{baseUrl}}/api/v1/menu-groups
 Authorization: Bearer {{auth_token}}
