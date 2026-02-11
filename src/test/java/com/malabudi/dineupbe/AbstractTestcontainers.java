@@ -9,7 +9,7 @@ public abstract class AbstractTestcontainers {
 
     @ServiceConnection
     protected static final PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:16-alpine");
+            new PostgreSQLContainer<>("postgres:18-alpine");
 
     static {
         postgres.start();
