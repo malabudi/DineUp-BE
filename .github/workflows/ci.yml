@@ -3,24 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-          cache: 'maven'
-
-      - name: Build Project
-        run: mvn --batch-mode clean package -DskipTests
-
   test:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -33,5 +16,5 @@ jobs:
           distribution: 'corretto'
           cache: 'maven'
 
-      - name: Run Tests
+      - name: Compile and Run Tests
         run: mvn --batch-mode clean test
