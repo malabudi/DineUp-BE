@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -21,6 +20,7 @@ jobs:
         run: mvn --batch-mode clean package -DskipTests
 
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
