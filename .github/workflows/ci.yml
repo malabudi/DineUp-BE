@@ -16,8 +16,13 @@ jobs:
           distribution: 'corretto'
           cache: 'maven'
 
+      # To be removed once Test Containers resolves their issue
+      # https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version
       - name: Declare Docker API Version
         run: echo "api.version=1.44" >> ~/.docker-java.properties
 
-      - name: Compile and Run Tests
+      - name: Build and Package
+        run: mvn clean package -DskipTests
+
+      - name: Run Tests
         run: mvn --batch-mode clean test
