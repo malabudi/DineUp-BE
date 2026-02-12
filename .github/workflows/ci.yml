@@ -31,7 +31,7 @@ jobs:
           mvn --batch-mode compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.region=us
           -Dsonar.organization=dineup
-          -Dsonar.projectKey=dineup
+          -Dsonar.projectKey=malabudi_DineUp-BE
 
   unit-tests:
     runs-on: ubuntu-latest
