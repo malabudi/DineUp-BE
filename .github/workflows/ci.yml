@@ -27,7 +27,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn --batch-mode verify sonar:sonar -Dsonar.project=dineup -DskipTests
+        run: > 
+          mvn --batch-mode verify sonar:sonar 
+          -Dsonar.project=dineup 
+          -Dsonar.organization=dineup
+          -DskipTests
 
   unit-tests:
     runs-on: ubuntu-latest
