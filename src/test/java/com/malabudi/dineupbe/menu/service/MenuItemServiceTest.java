@@ -107,12 +107,12 @@ public class MenuItemServiceTest {
                 null
         );
 
-        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
-
         // Act
         underTest.addMenuItem(request);
 
         // Assert
+        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
+
         verify(menuItemRepository).save(captor.capture());
         MenuItem capturedMenuItem = captor.getValue();
 
@@ -180,12 +180,14 @@ public class MenuItemServiceTest {
         when(menuGroupRepository.findById(newMenuGroupId)).thenReturn(Optional.of(newMenuGroup));
         when(menuItemRepository.save(defaultMenuItem)).thenReturn(defaultMenuItem);
 
-        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
+
 
         // Act
         underTest.updateMenuItem(MENU_ITEM_ID, request);
 
         // Assert
+        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
+
         verify(menuItemRepository).save(captor.capture());
         MenuItem capturedMenuItem = captor.getValue();
 
@@ -208,12 +210,12 @@ public class MenuItemServiceTest {
         when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.of(defaultMenuItem));
         when(menuItemRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
-
         // Act
         underTest.updateMenuItem(MENU_ITEM_ID, request);
 
         // Assert
+        ArgumentCaptor<MenuItem> captor = ArgumentCaptor.forClass(MenuItem.class);
+
         verify(menuItemRepository).save(captor.capture());
         MenuItem menuItem = captor.getValue();
 
