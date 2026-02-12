@@ -2,8 +2,13 @@ name: CI
 
 on: [push, pull_request]
 
+env:
+  JAVA_VERSION: 21
+  JAVA_DISTRIBUTION: 'corretto'
+  INTEGRATION_TEST_PATH: 'com.malabudi.dineupbe.journey.**'
+
 jobs:
-  unit-test:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -12,8 +17,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'corretto'
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: 'maven'
 
       # To be removed once Test Containers resolves their issue
@@ -33,8 +38,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'corretto'
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: 'maven'
 
       # To be removed once Test Containers resolves their issue
@@ -43,4 +48,4 @@ jobs:
         run: echo "api.version=1.44" >> ~/.docker-java.properties
 
       - name: Run Integration Tests
-        run: mvn --batch-mode clean test -Dtest="com.malabudi.dineupbe.journey.**"
+        run: mvn --batch-mode clean test -Dtest="${{ env.INTEGRATION_TEST_PATH }}"
