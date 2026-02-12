@@ -97,12 +97,10 @@ public class OrderRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void findByCustomerId_shouldReturnEmptyList_whenCustomerHasNoOrders() {
-        // Arrange - None
-
-        // Act
+        // When
         List<Order> orders = underTest.findByCustomerId(dummyCustomer1.getId());
 
-        // Assert
+        // Then
         assertThat(orders).isEmpty();
     }
 

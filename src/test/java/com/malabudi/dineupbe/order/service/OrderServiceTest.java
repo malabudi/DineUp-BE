@@ -34,6 +34,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
+
     @Mock
     private OrderRepository orderRepository;
 
@@ -126,19 +127,21 @@ public class OrderServiceTest {
         when(menuItemRepository.findById(1L)).thenReturn(Optional.of(dummyMenuItem));
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArgument(0));
 
-        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
-
         // Act
-        ResponseOrderDto res = underTest.createOrder(createOrderDto, dummyCustomer.getEmail());
+        underTest.createOrder(createOrderDto, dummyCustomer.getEmail());
 
         // Assert
+        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
+
         verify(orderRepository, times(1)).save(captor.capture());
-        assertThat(captor.getValue().getTotal()).isEqualTo(new BigDecimal("17.98"));
-        assertThat(captor.getValue().getOrderStatus()).isEqualTo(OrderStatus.PENDING);
-        assertThat(captor.getValue().getCustomer().getFirstName()).isEqualTo(dummyCustomer.getFirstName());
-        assertThat(captor.getValue().getLineItems().getFirst().getMenuItem().getName()).isEqualTo("Hamburger");
-        assertThat(captor.getValue().getLineItems().getFirst().getQuantity()).isEqualTo(2);
-        assertThat(captor.getValue().getLineItems().getFirst().getLineTotal()).isEqualTo(new BigDecimal("17.98"));
+        Order capturedOrder = captor.getValue();
+
+        assertThat(capturedOrder.getTotal()).isEqualTo(new BigDecimal("17.98"));
+        assertThat(capturedOrder.getOrderStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(capturedOrder.getCustomer().getFirstName()).isEqualTo(dummyCustomer.getFirstName());
+        assertThat(capturedOrder.getLineItems().getFirst().getMenuItem().getName()).isEqualTo("Hamburger");
+        assertThat(capturedOrder.getLineItems().getFirst().getQuantity()).isEqualTo(2);
+        assertThat(capturedOrder.getLineItems().getFirst().getLineTotal()).isEqualTo(new BigDecimal("17.98"));
     }
 
     @Test
@@ -194,14 +197,16 @@ public class OrderServiceTest {
         when(orderRepository.findById(any())).thenReturn(Optional.of(customerOrder));
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArgument(0));
 
-        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
-
         // Act
         underTest.updateOrderStatus(new UpdateOrderStatusDto(orderId, OrderStatus.COMPLETE));
 
         // Assert
+        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
+
         verify(orderRepository, times(1)).save(captor.capture());
-        assertThat(captor.getValue().getOrderStatus()).isEqualTo(OrderStatus.COMPLETE);
+        Order capturedOrder = captor.getValue();
+
+        assertThat(capturedOrder.getOrderStatus()).isEqualTo(OrderStatus.COMPLETE);
     }
 
     @Test

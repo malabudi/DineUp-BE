@@ -71,15 +71,14 @@ public class MenuGroupServiceTest {
 
     @Test
     void addMenuGroup_shouldAddMenuGroup_whenMenuGroupNotNull() {
-        // Arrange
-        ArgumentCaptor<MenuGroup> captor = ArgumentCaptor.forClass(MenuGroup.class);
-
-        // Act
+        // When
         underTest.addMenuGroup(new CreateMenuGroupDto(
                 "Main Course"
         ));
 
-        // Assert
+        // Then
+        ArgumentCaptor<MenuGroup> captor = ArgumentCaptor.forClass(MenuGroup.class);
+
         verify(menuGroupRepository).save(captor.capture());
         MenuGroup capturedMenuGroup = captor.getValue();
 
@@ -92,14 +91,14 @@ public class MenuGroupServiceTest {
         when(menuGroupRepository.findById(MENU_GROUP_ID)).thenReturn(Optional.of(defaultMenuGroup));
         when(menuGroupRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        ArgumentCaptor<MenuGroup> captor = ArgumentCaptor.forClass(MenuGroup.class);
-
         // Act
         underTest.updateMenuGroupName(MENU_GROUP_ID, new UpdateMenuGroupDto(
                 "Appetizers"
         ));
 
         // Assert
+        ArgumentCaptor<MenuGroup> captor = ArgumentCaptor.forClass(MenuGroup.class);
+
         verify(menuGroupRepository).save(captor.capture());
         MenuGroup capturedMenuGroup = captor.getValue();
 
