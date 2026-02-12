@@ -23,7 +23,7 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: 'maven'
 
-      - name: SonarQube Scan
+      - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -32,7 +32,9 @@ jobs:
           -Dsonar.region=us \
           -Dsonar.projectKey=dineup \
           -Dsonar.organization=dineup \
-          -Dmaven.test.skip=true
+          -Dmaven.test.skip=true \
+          -DskipTests \
+          -DskipITs
 
   unit-tests:
     runs-on: ubuntu-latest
