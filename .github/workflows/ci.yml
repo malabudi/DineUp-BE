@@ -8,8 +8,30 @@ env:
   INTEGRATION_TEST_PATH: 'com.malabudi.dineupbe.journey.**'
 
 jobs:
+  sonar-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: 'maven'
+
+      - name: Analyze with SonarQube
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn --batch-mode verify sonar:sonar -Dsonar.project=dineup -DskipTests
+
   unit-tests:
     runs-on: ubuntu-latest
+    needs: sonar-scan
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -31,6 +53,7 @@ jobs:
 
   integration-tests:
     runs-on: ubuntu-latest
+    needs: sonar-scan
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
