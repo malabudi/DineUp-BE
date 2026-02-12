@@ -16,7 +16,8 @@ jobs:
           distribution: 'corretto'
           cache: 'maven'
 
+      - name: Declare Docker API Version
+        run: echo "api.version=1.44" >> ~/.docker-java.properties
+
       - name: Compile and Run Tests
-        env:
-          DOCKER_API_VERSION: "1.44"
         run: mvn --batch-mode clean test
