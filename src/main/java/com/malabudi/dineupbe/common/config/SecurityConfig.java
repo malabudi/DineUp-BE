@@ -1,6 +1,7 @@
 package com.malabudi.dineupbe.common.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +34,11 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
+    @SneakyThrows
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             @Lazy JWTAuthenticationFilter jwtAuthFilter
-    ) throws Exception {
+    ) {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authRequests -> authRequests
