@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureTestRestTemplate
-public class OrderIT extends AbstractTestcontainers {
+class OrderIT extends AbstractTestcontainers {
 
     @Autowired
     private UserRepository userRepository;
@@ -168,31 +168,5 @@ public class OrderIT extends AbstractTestcontainers {
         assertThat(order.items().getFirst())
                 .returns("Hamburger", ResponseLineItemDto::menuItemName)
                 .returns(3, ResponseLineItemDto::quantity);
-    }
-
-    // TODO: Move to MenuIntegrationTests.java
-    @Test
-    void customerCannotCreateMenuItem() {
-        // Given: Customer is authenticated
-        HttpHeaders customerHeaders = new HttpHeaders();
-        customerHeaders.setBearerAuth(customerToken);
-
-        // When: Customer attempts to create menu item
-        RequestMenuItemDto menuItem = new RequestMenuItemDto(
-                1L,
-                "Burger",
-                "Tasty test burger",
-                new BigDecimal("8.99"),
-                null
-        );
-        HttpEntity<RequestMenuItemDto> menuItemEntity = new HttpEntity<>(menuItem, customerHeaders);
-        ResponseEntity<RequestMenuItemDto> menuItemResponse = restTemplate.postForEntity(
-                "api/v1/menu-items",
-                menuItemEntity,
-                RequestMenuItemDto.class
-        );
-
-        // Then: Deny access to create menu item
-        assertThat(menuItemResponse.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 }
