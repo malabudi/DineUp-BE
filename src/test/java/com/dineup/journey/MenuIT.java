@@ -18,22 +18,24 @@ import java.math.BigDecimal;
 @AutoConfigureRestTestClient
 class MenuIT extends BaseIT {
 
+    private CreateMenuGroupDto createMenuGroupDto;
+
     @BeforeEach
     void setUp() {
         super.setUpTestUsers();
+
+        createMenuGroupDto =  new CreateMenuGroupDto(
+                "Main Course"
+        );
     }
 
     @Test
     void adminCanCreateMenuItem() {
         // Create a menu group as an admin
-        CreateMenuGroupDto menuGroup = new CreateMenuGroupDto(
-                "Main Course"
-        );
-
-        var response = restTestClient.post()
+        ResponseMenuGroupDto response = restTestClient.post()
                 .uri("/api/v1/menu-groups")
                 .headers(h -> h.setBearerAuth(adminToken))
-                .body(menuGroup)
+                .body(createMenuGroupDto)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(ResponseMenuGroupDto.class)
@@ -69,17 +71,38 @@ class MenuIT extends BaseIT {
     }
 
     @Test
+    void customerCannotCreateMenuGroup() {
+        restTestClient.post()
+                .uri("/api/v1/menu-groups")
+                .headers(h -> h.setBearerAuth(customerToken))
+                .body(createMenuGroupDto)
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
     void customerCannotCreateMenuItem() {
-        // When: Customer attempts to create menu item
+        // Admin already creates a menu group first
+        ResponseMenuGroupDto response = restTestClient.post()
+                .uri("/api/v1/menu-groups")
+                .headers(h -> h.setBearerAuth(adminToken))
+                .body(createMenuGroupDto)
+                .exchange()
+                .expectBody(ResponseMenuGroupDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        Assertions.assertNotNull(response);
+
+        // Customer attempts to create a menu item and gets forbidden
         RequestMenuItemDto menuItem = new RequestMenuItemDto(
-                1L,
+                response.id(),
                 "Burger",
                 "Tasty test burger",
                 new BigDecimal("8.99"),
                 null
         );
 
-        // Then: Deny access to create menu item
         restTestClient.post()
                 .uri("/api/v1/menu-items")
                 .headers(h -> h.setBearerAuth(customerToken))
