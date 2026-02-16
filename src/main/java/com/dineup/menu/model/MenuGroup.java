@@ -21,10 +21,6 @@ public class MenuGroup {
     @OneToMany(mappedBy = "menuGroup", cascade = CascadeType.ALL)
     private List<MenuItem> menuItems = new ArrayList<>();
 
-    public MenuGroup(String name, List<MenuItem> menuItems) {
-        this.name = name;
-        this.menuItems = menuItems;
-    }
     public MenuGroup(String name) {
         this.name = name;
     }
