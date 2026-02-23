@@ -59,6 +59,6 @@ public class MenuItemController {
             @PathVariable Long id
     ) {
         menuItemService.deleteMenuItem(id);
-        return new ResponseEntity<>("Menu item with id " + id + " deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
