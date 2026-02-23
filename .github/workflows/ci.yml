@@ -76,12 +76,18 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: 'maven'
 
+      - name: Declare Docker API Version
+        run: echo "api.version=1.44" >> ~/.docker-java.properties
+
+      - name: Run Tests and Generate Coverage
+        run: mvn --batch-mode clean verify
+
       - name: Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
-          mvn --batch-mode compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn --batch-mode sonar:sonar
           -Dsonar.region=us
           -Dsonar.organization=dineup
           -Dsonar.projectKey=malabudi_DineUp-BE
