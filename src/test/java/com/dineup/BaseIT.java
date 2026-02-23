@@ -24,7 +24,7 @@ public abstract class BaseIT extends AbstractTestcontainers {
     protected String customerToken;
 
     protected void setUpTestUsers() {
-        userRepository.deleteAll(); // Clean slate
+        userRepository.deleteAll();
 
         User admin = new User("Test", "Admin", "admin@test.com", Role.ADMIN, "password");
         userRepository.save(admin);

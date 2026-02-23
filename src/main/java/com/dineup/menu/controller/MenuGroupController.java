@@ -60,6 +60,6 @@ public class MenuGroupController {
             @PathVariable Long id
     ) {
         menuGroupService.deleteMenuGroup(id);
-        return new ResponseEntity<>("Menu group with id " + id + " deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
