@@ -14,7 +14,7 @@ concurrency:
 env:
   JAVA_VERSION: 21
   JAVA_DISTRIBUTION: 'corretto'
-  INTEGRATION_TEST_PATH: 'com.malabudi.journey.**'
+  INTEGRATION_TEST_PATH: 'com.dineup.journey.**'
 
 jobs:
   sonarqube:
