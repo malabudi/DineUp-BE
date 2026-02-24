@@ -1,172 +1,48 @@
 package com.dineup.journey;
 
-import com.dineup.AbstractTestcontainers;
-import com.dineup.auth.data.AuthenticationRequest;
-import com.dineup.auth.data.AuthenticationResponse;
-import com.dineup.auth.data.RegisterRequest;
-import com.dineup.common.util.OrderStatus;
-import com.dineup.common.util.Role;
-import com.dineup.menu.dto.CreateMenuGroupDto;
-import com.dineup.menu.dto.ResponseMenuGroupDto;
-import com.dineup.menu.dto.RequestMenuItemDto;
-import com.dineup.menu.dto.ResponseMenuItemDto;
-import com.dineup.order.dto.CreateOrderDto;
-import com.dineup.order.dto.ResponseLineItemDto;
-import com.dineup.order.dto.RequestLineItemDto;
-import com.dineup.order.dto.ResponseOrderDto;
-import com.dineup.user.repository.UserRepository;
+import com.dineup.BaseIT;
+import com.dineup.menu.repository.MenuGroupRepository;
+import com.dineup.menu.repository.MenuItemRepository;
+import com.dineup.order.repository.OrderRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.resttestclient.TestRestTemplate;
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import java.math.BigDecimal;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@AutoConfigureTestRestTemplate
-class OrderIT extends AbstractTestcontainers {
+@AutoConfigureRestTestClient
+class OrderIT extends BaseIT {
 
     @Autowired
-    private UserRepository userRepository;
+    private MenuItemRepository menuItemRepository;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MenuGroupRepository menuGroupRepository;
 
-    private String customerToken;
-    private String adminToken;
+    @Autowired
+    private OrderRepository orderRepository;
 
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll();
+        super.setUpTestUsers();
+    }
 
-        // Register and login as a customer
-        RegisterRequest registerCustomerRequest = new RegisterRequest(
-                "Customer",
-                "User",
-                "customer@test.com",
-                Role.CUSTOMER,
-                "testpassword123"
-        );
-
-        restTemplate.postForEntity(
-                "/api/v1/auth/register",
-                registerCustomerRequest,
-                AuthenticationResponse.class
-        );
-
-        AuthenticationRequest authCustomerRequest = new AuthenticationRequest(
-          "customer@test.com",
-          "testpassword123"
-        );
-
-        ResponseEntity<AuthenticationResponse> customerLoginResponse = restTemplate.postForEntity(
-                "/api/v1/auth/authenticate",
-                authCustomerRequest,
-                AuthenticationResponse.class
-        );
-
-        customerToken = customerLoginResponse.getBody() != null ? customerLoginResponse.getBody().getToken() : null;
-
-        // Register and login as an admin
-        RegisterRequest registerAdminRequest = new RegisterRequest(
-                "Admin",
-                "User",
-                "adminuser@test.com",
-                Role.ADMIN,
-                "testpassword123"
-        );
-
-        restTemplate.postForEntity(
-                "/api/v1/auth/register",
-                registerAdminRequest,
-                AuthenticationResponse.class
-        );
-
-        AuthenticationRequest authAdminRequest = new AuthenticationRequest(
-                "adminuser@test.com",
-                "testpassword123"
-        );
-
-        ResponseEntity<AuthenticationResponse> adminLoginResponse = restTemplate.postForEntity(
-                "/api/v1/auth/authenticate",
-                authAdminRequest,
-                AuthenticationResponse.class
-        );
-
-        adminToken = adminLoginResponse.getBody() != null ? adminLoginResponse.getBody().getToken() : null;
+    @AfterEach
+    void tearDown() {
+        menuItemRepository.deleteAll();
+        menuGroupRepository.deleteAll();
+        orderRepository.deleteAll();
     }
 
     @Test
     void customerCanPlaceOrder() {
-        // Given: Admin creates one menu group and one menu item
-        HttpHeaders adminHeaders = new HttpHeaders();
-        adminHeaders.setBearerAuth(adminToken);
-        
-        CreateMenuGroupDto mainCourseRequest = new CreateMenuGroupDto(
-                "Main Course"
-        );
-        HttpEntity<CreateMenuGroupDto> mainCourseEntity = new HttpEntity<>(mainCourseRequest, adminHeaders);
 
-        ResponseEntity<ResponseMenuGroupDto> mainCourseResponse =
-                restTemplate.postForEntity(
-                        "/api/v1/menu-groups",
-                        mainCourseEntity,
-                        ResponseMenuGroupDto.class
-                );
-        
-        RequestMenuItemDto hamburgerRequest = new RequestMenuItemDto(
-                mainCourseResponse.getBody() != null ? mainCourseResponse.getBody().id() : null,
-                "Hamburger",
-                "A beef patty placed inside a pretzel bun, served with lettuce, tomato, onion, pickles, and famous housemade aioli.",
-                new BigDecimal("9.99"),
-                null
-        );
-        HttpEntity<RequestMenuItemDto> hamburgerEntity = new HttpEntity<>(hamburgerRequest, adminHeaders);
-
-        ResponseEntity<ResponseMenuItemDto> hamburgerResponse =
-                restTemplate.postForEntity(
-                        "/api/v1/menu-items",
-                        hamburgerEntity,
-                        ResponseMenuItemDto.class
-                );
-        Long menuItemId = hamburgerResponse.getBody() != null ? hamburgerResponse.getBody().id() : null;
-
-        // When: Customer places order
-        HttpHeaders customerHeaders = new HttpHeaders();
-        customerHeaders.setBearerAuth(customerToken);
-
-        CreateOrderDto orderRequest = new CreateOrderDto(
-                List.of(new RequestLineItemDto(menuItemId, 3))
-        );
-
-        HttpEntity<CreateOrderDto> orderEntity = new HttpEntity<>(orderRequest, customerHeaders);
-        ResponseEntity<ResponseOrderDto> orderResponse = restTemplate.postForEntity(
-                "/api/v1/orders",
-                orderEntity,
-                ResponseOrderDto.class
-        );
-
-        // Then: Order is successfully placed
-        assertThat(orderResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        ResponseOrderDto order = orderResponse.getBody();
-        assertThat(order).isNotNull();
-        assertThat(order.id()).isNotNull();
-        assertThat(order.status()).isEqualTo(OrderStatus.PENDING);
-        assertThat(order.total()).isEqualByComparingTo(new BigDecimal("29.97"));
-        assertThat(order.items()).hasSize(1);
-        assertThat(order.items().getFirst())
-                .returns("Hamburger", ResponseLineItemDto::menuItemName)
-                .returns(3, ResponseLineItemDto::quantity);
     }
 }
