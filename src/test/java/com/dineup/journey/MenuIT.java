@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @AutoConfigureRestTestClient
 class MenuIT extends BaseIT {
+
     private static final String MENU_GROUP_URI = "/api/v1/menu-groups";
     private static final String MENU_ITEM_URI = "/api/v1/menu-items";
     private static final String TEST_ITEM_NAME = "Burger";
