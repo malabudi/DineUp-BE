@@ -11,6 +11,7 @@ RUN ./mvnw clean package -DskipTests
 # Stage 2: Setup Runtime Image
 FROM eclipse-temurin:21-jdk
 RUN apt-get update && apt-get install -y bash passwd && rm -rf /var/lib/apt/lists/*
+RUN groupadd docker && usermod -aG docker spring
 RUN useradd -m spring || echo "User already exists"
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
