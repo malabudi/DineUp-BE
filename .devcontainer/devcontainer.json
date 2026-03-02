@@ -1,0 +1,33 @@
+{
+  name: "DineUp Backend",
+  dockerComposeFile: ["../docker-compose.yaml"],
+  service: "app",
+  workspaceFolder: "/app",
+  customizations : {
+    jetbrains : {
+      backend : "IntelliJ",
+      settings : {
+        // IDE settings can be added via “Show context actions”|“Add currently modified settings from IDE”.
+        // A complete list of supported settings is also available through auto-completion
+      },
+      plugins: [
+        // A set of plugin IDs.
+        // Plugin ID can be found on the corresponding plugin’s page at https://plugins.jetbrains.com.
+        "ru.adelf.idea.dotenv",
+        "Docker",
+        "org.sonarlint.idea",
+        "com.intellij.spring"
+      ]
+    }
+  },
+  features: {
+    "ghcr.io/devcontainers/features/git": {
+      "version": "latest"
+    },
+    // Add additional features to your project using auto-completion.
+  },
+  // Comment out to connect as the root user.
+  remoteUser: "spring",
+  "forwardPorts": [8080, 5432],
+  "postCreateCommand": "./mvnw dependency:resolve"
+}
