@@ -13,11 +13,35 @@ services:
     ports:
       - "5332:5432"
     networks:
-      - db
+      - app-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d dineup"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  app:
+    container_name: spring-boot-app
+    build:
+      context: .
+      dockerfile: .dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/dineup
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    #restart: unless-stopped
 
 networks:
-  db:
+  app-network:
     driver: bridge
 
 volumes:
