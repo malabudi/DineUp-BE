@@ -3,6 +3,8 @@
   dockerComposeFile: ["../docker-compose.yaml"],
   service: "app",
   workspaceFolder: "/app",
+  forwardPorts: [8080, 5432],
+  postCreateCommand: "./mvnw dependency:resolve",
   customizations : {
     jetbrains : {
       backend : "IntelliJ",
@@ -21,15 +23,8 @@
     }
   },
   features: {
-    "ghcr.io/devcontainers/features/git": "latest",
-    "ghcr.io/devcontainers/features/docker-in-docker": "latest"
     // Add additional features to your project using auto-completion.
+    "ghcr.io/devcontainers/features/git": {},
   },
-  "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ],
-  // Comment out to connect as the root user.
-  remoteUser: "spring",
-  "forwardPorts": [8080, 5432],
-  "postCreateCommand": "./mvnw dependency:resolve"
+  remoteUser: "ubuntu"
 }
