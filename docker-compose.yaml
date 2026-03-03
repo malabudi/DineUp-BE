@@ -24,6 +24,7 @@ services:
   app:
     container_name: spring-boot-app
     build:
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -38,10 +39,6 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    volumes:
-      - .:/app
-      - ~/.m2:/root/.m2
-    command: sleep infinity
 
 networks:
   app-network:
