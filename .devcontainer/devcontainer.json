@@ -5,6 +5,7 @@
   workspaceFolder: "/app",
   forwardPorts: [8080, 5432],
   postCreateCommand: "./mvnw dependency:resolve",
+  postStartCommand: "git config --global --add safe.directory /app",
   customizations : {
     jetbrains : {
       backend : "IntelliJ",
