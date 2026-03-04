@@ -24,6 +24,12 @@ class SanitizeStringDeserializerTest {
     }
 
     @Test
+    void shouldReturnNull_whenValueIsNull() {
+        String result = objectMapper.readValue("null", String.class);
+        assertThat(result).isNull();
+    }
+
+    @Test
     void shouldTrimWhitespace() {
         String result = objectMapper.readValue("\"    Trim Whitespace    \"", String.class);
         assertThat(result).isEqualTo("Trim Whitespace");
