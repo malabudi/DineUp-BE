@@ -26,7 +26,7 @@ public class SanitizeStringDeserializer extends ValueDeserializer<String> {
         // Normalize whitespaces
         value = value.replaceAll("\\s+", " ");
 
-        // Strip HTML tags and escape dangerous characters
+        // Strip HTML tags and escape dangerous characters to prevent HTML injection and XSS attacks
         value = SANITIZER_POLICY.sanitize(value);
 
         return value;

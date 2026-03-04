@@ -24,14 +24,20 @@ class SanitizeStringDeserializerTest {
     }
 
     @Test
-    void shouldTrimWhitespace() throws Exception {
+    void shouldTrimWhitespace() {
         String result = objectMapper.readValue("\"    Trim Whitespace    \"", String.class);
         assertThat(result).isEqualTo("Trim Whitespace");
     }
 
     @Test
-    void shouldNormalizeWhitespace() throws Exception {
+    void shouldNormalizeWhitespace() {
         String result = objectMapper.readValue("\"Normalize   the     Whitespaces\"", String.class);
         assertThat(result).isEqualTo("Normalize the Whitespaces");
+    }
+
+    @Test
+    void shouldStripHtmlTags() {
+        String result = objectMapper.readValue("\"<script>alert('xss')</script>Html Tag\"", String.class);
+        assertThat(result).isEqualTo("Html Tag");
     }
 }
