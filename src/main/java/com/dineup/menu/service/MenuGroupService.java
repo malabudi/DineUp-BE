@@ -10,7 +10,6 @@ import com.dineup.menu.repository.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuGroupService {
@@ -25,7 +24,7 @@ public class MenuGroupService {
         return menuGroupRepository.findAll()
                 .stream()
                 .map(MenuGroupMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseMenuGroupDto getMenuGroupById(Long id) {
