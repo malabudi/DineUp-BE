@@ -1,7 +1,8 @@
-package com.dineup.user.repository;
+package com.dineup.user;
 
 import com.dineup.AbstractTestcontainers;
 import com.dineup.common.util.Role;
+import com.dineup.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
