@@ -18,13 +18,12 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class OrderRepositoryTest extends AbstractTestcontainers {
+class OrderRepositoryTest extends AbstractTestcontainers {
 
     @Autowired
     private OrderRepository underTest;
