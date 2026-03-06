@@ -1,10 +1,11 @@
-package com.dineup.menu.service;
+package com.dineup.menu;
 
 import com.dineup.menu.dto.CreateMenuGroupDto;
 import com.dineup.menu.dto.UpdateMenuGroupDto;
 import com.dineup.menu.exception.MenuGroupNotFoundException;
 import com.dineup.menu.model.MenuGroup;
 import com.dineup.menu.repository.MenuGroupRepository;
+import com.dineup.menu.service.MenuGroupService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

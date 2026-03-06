@@ -1,4 +1,4 @@
-package com.dineup.menu.service;
+package com.dineup.menu;
 
 import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
@@ -9,6 +9,7 @@ import com.dineup.menu.model.MenuGroup;
 import com.dineup.menu.model.MenuItem;
 import com.dineup.menu.repository.MenuGroupRepository;
 import com.dineup.menu.repository.MenuItemRepository;
+import com.dineup.menu.service.MenuItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
