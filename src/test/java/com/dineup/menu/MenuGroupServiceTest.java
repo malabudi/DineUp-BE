@@ -20,17 +20,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class MenuGroupServiceTest {
+class MenuGroupServiceTest {
     @Mock
     private MenuGroupRepository menuGroupRepository;
 
     private MenuGroupService underTest;
     private MenuGroup defaultMenuGroup;
 
-    private final Long MENU_GROUP_ID = 1L;
+    private static final Long MENU_GROUP_ID = 1L;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         underTest = new MenuGroupService(menuGroupRepository);
 
         defaultMenuGroup = new MenuGroup("Main Course");
@@ -110,11 +110,12 @@ public class MenuGroupServiceTest {
     void updateMenuGroup_shouldThrowAnException_whenMenuGroupNotFound() {
         // Arrange
         when(menuGroupRepository.findById(MENU_GROUP_ID)).thenReturn(Optional.empty());
+        UpdateMenuGroupDto dto = new UpdateMenuGroupDto(
+                "Appetizers"
+        );
 
         // Act & Assert
-        assertThatThrownBy(() -> underTest.updateMenuGroupName(MENU_GROUP_ID, new UpdateMenuGroupDto(
-                "Appetizers"
-        )))
+        assertThatThrownBy(() -> underTest.updateMenuGroupName(MENU_GROUP_ID, dto))
                 .isInstanceOf(MenuGroupNotFoundException.class)
                 .hasMessage("Menu group with id " + MENU_GROUP_ID + " not found");
     }
