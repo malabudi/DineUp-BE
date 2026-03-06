@@ -6,6 +6,7 @@ import com.dineup.auth.data.RegisterRequest;
 import com.dineup.auth.exception.InvalidCredentialsException;
 import com.dineup.auth.exception.UserAlreadyExistsException;
 import com.dineup.common.config.JwtService;
+import com.dineup.user.exception.UserNotFoundException;
 import com.dineup.user.repository.UserRepository;
 import com.dineup.common.util.Role;
 import lombok.RequiredArgsConstructor;
