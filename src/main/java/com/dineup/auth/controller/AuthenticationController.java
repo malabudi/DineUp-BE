@@ -25,9 +25,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-    // TODO: Rename function for clarity
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> registerUser(
+    public ResponseEntity<AuthenticationResponse> authenticateUser(
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
