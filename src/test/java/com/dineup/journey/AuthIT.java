@@ -4,14 +4,16 @@ import com.dineup.BaseIT;
 import com.dineup.auth.data.AuthenticationRequest;
 import com.dineup.auth.data.AuthenticationResponse;
 import com.dineup.auth.data.RegisterRequest;
+import com.dineup.common.dto.ErrorResponseDto;
+import com.dineup.common.exception.ResourceConflictException;
 import com.dineup.common.util.Role;
 import com.dineup.user.model.User;
 import com.dineup.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -103,5 +105,46 @@ class AuthIT extends BaseIT {
                 .body(authRequest)
                 .exchange()
                 .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void shouldReturnConflictWhenUserAlreadyExists() {
+        // Arrange
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .firstName("Test")
+                .lastName("User")
+                .email("testuser@example.com")
+                .role(Role.CUSTOMER)
+                .password("password")
+                .build();
+
+        userRepository.save(new User(
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                registerRequest.getEmail(),
+                registerRequest.getRole(),
+                registerRequest.getPassword()
+        ));
+
+        // Act
+        ErrorResponseDto response = restTestClient.post()
+                .uri(AUTH_REGISTER_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(registerRequest)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT.value())
+                .expectBody(ErrorResponseDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        // Assert
+        assertThat(response).isNotNull();
+        assertThat(response.errorName()).isEqualTo("Conflict");
+        assertThat(response.errorMessage()).isEqualTo(
+                "User with email " +
+                        registerRequest.getEmail() +
+                        " already exists"
+        );
+        assertThat(response.status()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 }
