@@ -3,7 +3,6 @@ package com.dineup.menu.controller;
 import com.dineup.menu.dto.MenuItemSalesDto;
 import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
-import com.dineup.menu.model.MenuItem;
 import com.dineup.menu.service.MenuItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

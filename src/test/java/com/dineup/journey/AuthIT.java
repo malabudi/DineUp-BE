@@ -5,7 +5,6 @@ import com.dineup.auth.data.AuthenticationRequest;
 import com.dineup.auth.data.AuthenticationResponse;
 import com.dineup.auth.data.RegisterRequest;
 import com.dineup.common.dto.ErrorResponseDto;
-import com.dineup.common.exception.ResourceConflictException;
 import com.dineup.common.util.Role;
 import com.dineup.user.model.User;
 import com.dineup.user.repository.UserRepository;
