@@ -1,5 +1,6 @@
 package com.dineup.menu.service;
 
+import com.dineup.menu.dto.MenuItemSalesDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
 import com.dineup.menu.exception.InvalidMenuItemException;
 import com.dineup.menu.exception.MenuGroupNotFoundException;
@@ -10,8 +11,10 @@ import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.mapper.MenuItemMapper;
 import com.dineup.menu.repository.MenuGroupRepository;
 import com.dineup.menu.repository.MenuItemRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,6 +40,11 @@ public class MenuItemService {
         return  menuGroupRepository.findById(menuGroupId).orElseThrow(
                 () -> new MenuGroupNotFoundException(menuGroupId)
         );
+    }
+
+    public List<MenuItemSalesDto> getBestSellingMenuItems() {
+        return menuItemRepository
+                .findBestSellingMenuItems(PageRequest.of(0, 10));
     }
 
     public List<ResponseMenuItemDto> getAllMenuItems() {

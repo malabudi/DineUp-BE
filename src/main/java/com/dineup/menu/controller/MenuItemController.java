@@ -1,7 +1,9 @@
 package com.dineup.menu.controller;
 
+import com.dineup.menu.dto.MenuItemSalesDto;
 import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
+import com.dineup.menu.model.MenuItem;
 import com.dineup.menu.service.MenuItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,12 @@ public class MenuItemController {
             @PathVariable Long id
     ) {
         ResponseMenuItemDto res = menuItemService.getMenuItemById(id);
+        return new ResponseEntity<>(res,  HttpStatus.OK);
+    }
+
+    @GetMapping("/best-selling")
+    public ResponseEntity<List<MenuItemSalesDto>> getBestSellingMenuItems() {
+        List<MenuItemSalesDto> res = menuItemService.getBestSellingMenuItems();
         return new ResponseEntity<>(res,  HttpStatus.OK);
     }
 
