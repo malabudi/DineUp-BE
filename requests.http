@@ -95,6 +95,10 @@ Authorization: Bearer {{auth_token}}
 GET {{baseUrl}}/api/v1/menu-items/1
 Authorization: Bearer {{auth_token}}
 
+### GET best selling menu items
+GET {{baseUrl}}/api/v1/menu-items/best-selling
+Authorization: Bearer {{auth_token}}
+
 ### POST request to add menu item
 POST {{baseUrl}}/api/v1/menu-items
 Authorization: Bearer {{auth_token}}
