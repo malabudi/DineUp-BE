@@ -12,12 +12,12 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
     @Query("""
         SELECT li.menuItem.id AS menuItemId,
-               li.menuItem.name as menuItemName,
+               li.menuItem.name AS menuItemName,
                SUM(li.quantity) AS totalQuantitySold
         FROM LineItem li
         WHERE li.order.orderStatus = "COMPLETE"
         GROUP BY li.menuItem.id, li.menuItem.name
-        ORDER BY totalQuantitySold DESC
+        ORDER BY SUM(li.quantity) DESC
         """)
     List<MenuItemSalesDto> findBestSellingMenuItems(Pageable pageable);
 }
