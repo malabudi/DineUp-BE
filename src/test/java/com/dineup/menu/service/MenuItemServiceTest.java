@@ -1,4 +1,4 @@
-package com.dineup.menu;
+package com.dineup.menu.service;
 
 import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
@@ -9,7 +9,6 @@ import com.dineup.menu.model.MenuGroup;
 import com.dineup.menu.model.MenuItem;
 import com.dineup.menu.repository.MenuGroupRepository;
 import com.dineup.menu.repository.MenuItemRepository;
-import com.dineup.menu.service.MenuItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class MenuItemServiceTest {
+class MenuItemServiceTest {
 
     @Mock
     private MenuItemRepository menuItemRepository;
@@ -90,6 +89,11 @@ public class MenuItemServiceTest {
         assertThatThrownBy(() -> underTest.getMenuItemById(MENU_ITEM_ID))
                 .isInstanceOf(MenuItemNotFoundException.class)
                 .hasMessage("Menu item with id " + MENU_ITEM_ID + " not found");
+    }
+
+    @Test
+    void getBestSellingMenuItems_shouldReturnBestSellingMenuItems_whenSoldMenuItemsExist() {
+
     }
 
     @Test
@@ -232,7 +236,9 @@ public class MenuItemServiceTest {
         when(menuItemRepository.findById(MENU_ITEM_ID)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> underTest.updateMenuItem(MENU_ITEM_ID, new RequestMenuItemDto(
+        assertThatThrownBy(() -> underTest.updateMenuItem(
+                MENU_ITEM_ID,
+                new RequestMenuItemDto(
                 1L,
                 "Pizza",
                 "Cheese and Dough",
