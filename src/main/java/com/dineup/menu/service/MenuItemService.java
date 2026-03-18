@@ -51,7 +51,7 @@ public class MenuItemService {
         return menuItemRepository.findAll()
                 .stream()
                 .map(MenuItemMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseMenuItemDto getMenuItemById(Long id) {
