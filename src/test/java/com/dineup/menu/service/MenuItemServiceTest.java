@@ -1,5 +1,6 @@
 package com.dineup.menu.service;
 
+import com.dineup.menu.dto.MenuItemSalesDto;
 import com.dineup.menu.dto.RequestMenuItemDto;
 import com.dineup.menu.dto.ResponseMenuItemDto;
 import com.dineup.menu.exception.InvalidMenuItemException;
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -93,7 +96,25 @@ class MenuItemServiceTest {
 
     @Test
     void getBestSellingMenuItems_shouldReturnBestSellingMenuItems_whenSoldMenuItemsExist() {
+        // Arrange
+        List<MenuItemSalesDto> mockSales = List.of(
+                new MenuItemSalesDto(1L, "Classic Burger", 5L),
+                new MenuItemSalesDto(2L, "Lemonade", 2L)
+        );
 
+        when(menuItemRepository.findBestSellingMenuItems(PageRequest.of(0, 10)))
+                .thenReturn(mockSales);
+
+        // Act
+        List<MenuItemSalesDto> result = underTest.getBestSellingMenuItems();
+
+        // Assert
+        verify(menuItemRepository).findBestSellingMenuItems(PageRequest.of(0, 10));
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0).menuItemName()).isEqualTo("Classic Burger");
+        assertThat(result.get(0).totalQuantitySold()).isEqualTo(5L);
+        assertThat(result.get(1).menuItemName()).isEqualTo("Lemonade");
+        assertThat(result.get(1).totalQuantitySold()).isEqualTo(2L);
     }
 
     @Test
