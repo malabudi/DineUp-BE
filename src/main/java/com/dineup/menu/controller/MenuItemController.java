@@ -35,6 +35,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/best-selling")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MenuItemSalesDto>> getBestSellingMenuItems() {
         List<MenuItemSalesDto> res = menuItemService.getBestSellingMenuItems();
         return new ResponseEntity<>(res,  HttpStatus.OK);
