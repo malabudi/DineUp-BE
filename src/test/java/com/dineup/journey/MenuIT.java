@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -95,7 +96,7 @@ class MenuIT extends BaseIT {
         return menuItem;
     }
 
-
+    // Tests
     @Test
     void adminCanCreateMenuItem() {
         // Create a menu group and item as an admin
@@ -274,6 +275,35 @@ class MenuIT extends BaseIT {
                     assertThat(error).isNotNull();
                     assertThat(error.errorName()).isEqualTo("Not Found");
                     assertThat(error.errorMessage()).isEqualTo("Menu item with id " + id + " not found");
+                });
+    }
+
+    @Test
+    void adminCanGetBestSellingMenuItems() {
+        ResponseMenuGroupDto menuGroup = createMenuGroup(adminToken);
+        createMenuItem(menuGroup, adminToken);
+
+        restTestClient.get()
+                .uri(MENU_ITEM_URI + "/best-selling")
+                .headers(h -> h.setBearerAuth(adminToken))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class)
+                .value(res -> assertThat(res).isNotNull());
+    }
+
+    @Test
+    void customerCannotGetBestSellingMenuItems() {
+        restTestClient.get()
+                .uri(MENU_ITEM_URI + "/best-selling")
+                .headers(h -> h.setBearerAuth(customerToken))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorResponseDto.class)
+                .value(error -> {
+                    assertThat(error).isNotNull();
+                    assertThat(error.errorName()).isEqualTo("Forbidden");
+                    assertThat(error.errorMessage()).isEqualTo("Access Denied");
                 });
     }
 
