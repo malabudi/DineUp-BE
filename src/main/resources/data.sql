@@ -1,3 +1,10 @@
+-- Customer and Admin Test Accounts
+INSERT INTO users (first_name, last_name, email, password, role)
+VALUES ('Admin', 'User', 'admin@dineup.com', '$2a$12$ANiLhhbyfOWlmvALY1HVKef8ocpOIz9q4a3Rnk427wO.50G4BEbRu', 'ADMIN');
+
+INSERT INTO users (first_name, last_name, email, password, role)
+VALUES ('John', 'Doe', 'customer@dineup.com', '$2a$12$ANiLhhbyfOWlmvALY1HVKef8ocpOIz9q4a3Rnk427wO.50G4BEbRu', 'CUSTOMER');
+
 -- Menu Groups
 INSERT INTO menu_groups (name) VALUES ('Starters');
 INSERT INTO menu_groups (name) VALUES ('Mains');
